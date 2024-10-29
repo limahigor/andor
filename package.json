@@ -1,0 +1,24 @@
+{
+  "name": "andor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "private": true,
+  "workspaces": [
+    "user-service",
+    "media-service",
+    "auth-service",
+    "streaming-service",
+    "gateway"
+  ],
+  "devDependencies": {
+    "git-commit-msg-linter": "^5.0.8",
+    "i": "^0.3.7"
+  }
+}
