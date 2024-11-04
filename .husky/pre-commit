@@ -1,0 +1,1 @@
+yarn workspaces run lint-staged
