@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "andor",
+  "devDependencies": {
+    "git-commit-msg-linter": "^5.0.8",
+    "@types/node": "^22.8.7",
+    "eslint": "^9.14.0",
+    "eslint-config-love": "^97.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "version": "1.0.0",
+  "repository": "https://github.com/limahigor/andor.git",
+  "author": "Higor <limahigor.g@gmail.com>",
+  "license": "MIT"
+}
