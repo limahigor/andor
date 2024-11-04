@@ -1,2 +1,1 @@
-echo "test"
 yarn workspaces run lint-staged
