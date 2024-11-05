@@ -1,4 +1,8 @@
-import love from 'eslint-config-love'
+import { fileURLToPath } from 'url';
+import love from 'eslint-config-love';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = __filename.substring(0, __filename.lastIndexOf('/'));
 
 export default [
   {
@@ -13,4 +17,4 @@ export default [
       "@typescript-eslint/no-unsafe-assignment": "off"
     },
   },
-]
+];
