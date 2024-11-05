@@ -10,6 +10,7 @@ export default [
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-magic-numbers": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off"
     },
   },
 ]
