@@ -15,7 +15,8 @@ export default [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-magic-numbers": "off",
       "eslint-comments/require-description": "off",
-      "@typescript-eslint/no-unsafe-assignment": "off"
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/class-methods-use-this": "off",
     },
   },
 ];
