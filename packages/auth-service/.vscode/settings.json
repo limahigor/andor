@@ -1,0 +1,3 @@
+{
+    "jest.jestCommandLine": "yarn workspace auth-service run test:unit"
+}

@@ -4,8 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --passWithNoTests --watch",
-    "test:staged": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "yarn workspace auth-service test --watch -c jest-unit-config.js",
+    "test:integration": "yarn workspace auth-service test -- --watch -c jest-integration-config.js",
+    "test:staged": "yarn workspace auth-service test --findRelatedTests",
+    "test:ci": "yarn workspace auth-service test --coverage",
     "pre-commit": "lint-staged"
   },
   "dependencies": {
