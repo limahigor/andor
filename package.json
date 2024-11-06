@@ -1,32 +1,24 @@
 {
-  "name": "andor",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "private": true,
-  "workspaces": [
-    "user-service",
-    "media-service",
-    "auth-service",
-    "streaming-service",
-    "gateway"
-  ],
+  "name": "andor",
   "devDependencies": {
-    "@types/node": "^22.8.4",
+    "@types/node": "^22.8.7",
+    "eslint": "^9.14.0",
+    "eslint-config-love": "^97.0.0",
     "git-commit-msg-linter": "^5.0.8",
-    "i": "^0.3.7",
+    "husky": "^9.1.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   },
-  "dependencies": {
-    "bootstrap": "^5.3.3",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
-    "mongoose": "^8.7.3"
-  }
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "postinstall": "husky install",
+    "prepare": "husky"
+  },
+  "version": "1.0.0",
+  "repository": "https://github.com/limahigor/andor.git",
+  "author": "Higor <limahigor.g@gmail.com>",
+  "license": "MIT"
 }
