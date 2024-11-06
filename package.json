@@ -14,7 +14,8 @@
     "packages/*"
   ],
   "scripts": {
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "prepare": "husky"
   },
   "version": "1.0.0",
   "repository": "https://github.com/limahigor/andor.git",

@@ -1,0 +1,17 @@
+.navbar {
+    background-color: #1c1c1c; /* Fundo da barra de navegação em preto */
+    border-bottom: 1px solid #353333; /* Borda inferior vermelha */
+  }
+  
+  .navbar-brand, .nav-link {
+    color: #fff; /* Cor branca para o texto */
+  }
+  
+  .nav-link:hover {
+    color: #e50914; /* Vermelho vibrante ao passar o mouse */
+  }
+  
+  .profile-icon {
+    color: #ffffff; /* Ícone de perfil em vermelho */
+  }
+  
