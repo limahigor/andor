@@ -17,7 +17,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
         password: "hashed_password"
       }
 
-      return await Promise.resolve(fakeAccount)
+      return fakeAccount
     }
   }
 
@@ -27,7 +27,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter{
     async encrypt (value: string): Promise<string>{
-      return await Promise.resolve('hashed_password')
+      return 'hashed_password'
     }
   }
 
@@ -101,5 +101,23 @@ describe('DbAddAccount Usecase', () => {
 
     const promise = sut.add(accountData)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return an account on success', async () => {
+    const { sut } = makeSut()
+
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_mail',
+      password: 'valid_password'
+    }
+
+    const newAccount = await sut.add(accountData)
+    expect(newAccount).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'hashed_password'
+    })
   })
 })
