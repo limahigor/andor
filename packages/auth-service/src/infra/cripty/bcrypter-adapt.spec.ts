@@ -35,5 +35,5 @@ describe('BCrypt Adapter', () => {
     (bcrypt.hash as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(sut.encrypt('any_value')).rejects.toThrow();
-  });
+  })
 })
