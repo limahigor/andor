@@ -77,3 +77,49 @@
     background-color: #f42c28; /* Cor mais clara no hover */
   }
   
+
+  .App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .open-modal-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Sobreposição do Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Fundo preto com opacidade reduzida */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Conteúdo do Modal */
+  .modal-content {
+    background-color: #1c1c1c; /* Fundo do modal em preto */
+    color: #fff; /* Texto branco para contraste */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  /* Estilizando os botões na seção de footer do modal */
+.modal-footer .btn {
+  padding: 7px 20px; /* Aumenta o tamanho do botão */
+  margin-right: 10px; /* Adiciona espaço entre os botões */
+}
+
+.modal-footer .btn:last-child {
+  margin-right: 0; /* Remove a margem do último botão (Salvar) */
+}

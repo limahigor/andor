@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "auth-service",
+			"path": "packages/auth-service"
+		},
+		{
+			"name": "media-service",
+			"path": "packages/media-service"
+		}
+	],
+	"settings": {}
+}
