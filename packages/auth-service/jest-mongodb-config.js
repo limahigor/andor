@@ -6,7 +6,9 @@ module.exports = {
     },
     autoStart: false,
     instance: {
-      dbName: 'jest'
+      dbName: 'jest',
     },
+    replicaSet: 'rs0', // Habilita replica set
+    debug: true, // Logs detalhados
   },
 };

@@ -8,7 +8,7 @@ module.exports = merge.recursive(tsPreset, mongotsPreset, {
   roots: ['<rootDir>/src'],
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
   coverageDirectory: 'coverage',
-  testEnvironment: 'node',
+  // testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'
   }

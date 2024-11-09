@@ -1,19 +1,27 @@
-import { MongoClient } from "mongodb";
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { MongoClient, type Collection } from "mongodb";
 
 export const MongoHelper = {
   client: null as unknown as MongoClient,
 
-  async connect(this: typeof MongoHelper, uri: string): Promise<void> {
+  async connect(uri: string): Promise<void> {
     if (!this.client) {
-      this.client = await MongoClient.connect(uri);
+      const client = new MongoClient(uri);
+      await client.connect();
+      this.client = client;
     }
   },
 
-  async disconnect(this: typeof MongoHelper): Promise<void> {
+  async disconnect(): Promise<void> {
     if (this.client) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       await this.client.close();
       this.client = null;
     }
-  }
+  },
+
+  getCollection(name: string): Collection {
+    console.log('Accessing database:', this.client.db().databaseName); // Log para debug
+    return this.client.db().collection(name);
+  },
 };
