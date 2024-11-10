@@ -1,4 +1,4 @@
-export type * from "../../protocols/encrypter"
+export type * from "../../protocols/hasher"
 export type * from "../../protocols/add-account-repository"
 export type * from "../../protocols/add-account-repository"
 export type * as AddAccountModel from "../../protocols/add-account-repository"
