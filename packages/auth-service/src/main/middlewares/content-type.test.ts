@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import request from 'supertest';
 import app from '../config/app';
 
@@ -7,7 +8,6 @@ describe('Content Type Middleware', () => {
       res.send('');
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await request(app)
       .get('/test_content_type')
       .expect('content-type', /json/)
@@ -19,7 +19,6 @@ describe('Content Type Middleware', () => {
       res.send('');
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await request(app)
       .get('/test_content_type_xml')
       .expect('content-type', /xml/)
