@@ -1,16 +1,11 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
-  "compilerOptions": {
-    "outDir": "./dist",
-    "module": "commonjs",
-    "target": "es2022",
-    "esModuleInterop": true,
-    "allowJs": true,
-    "strictNullChecks": true
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    }
   }
   
-}

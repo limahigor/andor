@@ -1,0 +1,8 @@
+{
+  "*.ts": [
+    "eslint 'src/**' --fix"
+  ],
+  "backend/**/*.test.ts": [
+    "yarn workspace media-service-backend run test"
+  ]
+}
