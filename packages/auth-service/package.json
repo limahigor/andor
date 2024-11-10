@@ -17,6 +17,7 @@
     "@types/express": "^5.0.0",
     "bcrypt": "^5.1.1",
     "express": "^4.21.1",
+    "fast-glob": "^3.3.2",
     "mongodb": "^6.10.0",
     "sucrase": "^3.35.0",
     "validator": "^13.12.0"
