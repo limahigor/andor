@@ -20,7 +20,9 @@ export class DbLoadAccount implements LoadAccount {
 
     if(!exists){
       const hashedPassword = await this.hasher.hasher(loginData.password)
-      status = await this.loadAccountRepository.login({ ...loginData, password: hashedPassword })
+      const validID = await this.loadAccountRepository.login({ ...loginData, password: hashedPassword })
+
+      status = await this.encrypter.encrypt(validID)
     }
 
     return status
