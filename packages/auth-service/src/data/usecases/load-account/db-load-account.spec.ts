@@ -16,7 +16,7 @@ interface SutTypes {
 const makeLoadAccountRepository = (): LoadAccountRepository => {
   class LoadAccountRepositoryStub implements LoadAccountRepository {
     params: LoadAccountModel.Params
-    result = 'valid_token'
+    result = 'valid_id'
 
     async login(params: LoadAccountModel.Params): Promise<LoadAccountModel.Result> {
       this.params = params
@@ -31,7 +31,6 @@ const makeEncrypterStub = (): Encrypter => {
   class EncrypterStub implements Encrypter {
     param: string
     resultEncrypt = 'valid_token'
-    resultDecrypt = 'valid_id'
 
     async encrypt(param: string): Promise<string> {
       this.param = param
@@ -83,7 +82,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbLoadAccount Repository', () => {
-  test('Should call Encrypter with correct password', async () => {
+  test('Should call Hasher with correct password', async () => {
     const { sut, hasherStub } = makeSut()
     const hasherSpy = jest.spyOn(hasherStub, 'hasher')
 
@@ -139,7 +138,7 @@ describe('DbLoadAccount Repository', () => {
     expect(isValid).toBe('')
   })
 
-  test('Should return an account on success', async () => {
+  test('Should return an valid token on success', async () => {
     const { sut } = makeSut()
 
     const accountData = {
@@ -149,5 +148,18 @@ describe('DbLoadAccount Repository', () => {
 
     const isValid = await sut.login(accountData)
     expect(isValid).toBe('valid_token')
+  })
+
+  test('Should call Encrypter with correct data', async () => {
+    const { sut, encrypterStub } = makeSut()
+    const encrypterSpy = jest.spyOn(encrypterStub, 'encrypt')
+
+    const accountData = {
+      username: 'valid_name',
+      password: 'valid_password'
+    }
+
+    await sut.login(accountData)
+    expect(encrypterSpy).toHaveBeenCalledWith('valid_id')
   })
 });
