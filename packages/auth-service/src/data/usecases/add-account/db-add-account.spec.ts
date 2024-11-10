@@ -1,10 +1,15 @@
 import { DbAddAccount } from "./db-add-account"
-import type { AddAccountModel, AddAccountRepository, Encrypter } from "./db-add-account-protocols"
+import type { AddAccountModel, AddAccountRepository, CheckAccountByEmailRepository, Encrypter } from "./db-add-account-protocols"
+
+interface CheckAccountByEmailRepositoryWithResult extends CheckAccountByEmailRepository {
+  result: boolean
+}
 
 interface SutTypes {
   sut: DbAddAccount
   encrypterStub: Encrypter
   addAccountRepositoryStub: AddAccountRepository
+  checkByEmailStub: CheckAccountByEmailRepositoryWithResult
 }
 
 const makeAddAccountRepository = (): AddAccountRepository => {
@@ -31,12 +36,27 @@ const makeEncrypter = (): Encrypter => {
   return new EncrypterStub()
 }
 
+const makeCheckByEmailStub = (): CheckAccountByEmailRepositoryWithResult => {
+  class CheckByEmailStub implements CheckAccountByEmailRepository {
+    email: string
+    result = false
+
+    async checkByEmail(email: string): Promise<boolean> {
+      this.email = email
+      return this.result
+    }
+  }
+
+  return new CheckByEmailStub()
+}
+
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypter()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
+  const checkByEmailStub = makeCheckByEmailStub()
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub, checkByEmailStub)
 
-  return { sut, encrypterStub, addAccountRepositoryStub }
+  return { sut, encrypterStub, addAccountRepositoryStub, checkByEmailStub }
 }
 
 describe('DbAddAccount Usecase', () => {
@@ -45,7 +65,7 @@ describe('DbAddAccount Usecase', () => {
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
 
     const accountData = {
-      name: 'valid_name',
+      username: 'valid_name',
       email: 'valid_mail',
       password: 'valid_password'
     }
@@ -59,7 +79,7 @@ describe('DbAddAccount Usecase', () => {
     jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(Promise.reject(new Error()))
 
     const accountData = {
-      name: 'valid_name',
+      username: 'valid_name',
       email: 'valid_mail',
       password: 'valid_password'
     }
@@ -73,14 +93,14 @@ describe('DbAddAccount Usecase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
 
     const accountData = {
-      name: 'valid_name',
+      username: 'valid_name',
       email: 'valid_mail',
       password: 'valid_password'
     }
 
     await sut.add(accountData)
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'valid_name',
+      username: 'valid_name',
       email: 'valid_mail',
       password: 'hashed_password'
     })
@@ -91,7 +111,7 @@ describe('DbAddAccount Usecase', () => {
     jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(Promise.reject(new Error()))
 
     const accountData = {
-      name: 'valid_name',
+      username: 'valid_name',
       email: 'valid_mail',
       password: 'valid_password'
     }
@@ -104,7 +124,7 @@ describe('DbAddAccount Usecase', () => {
     const { sut } = makeSut()
 
     const accountData = {
-      name: 'valid_name',
+      username: 'valid_name',
       email: 'valid_mail',
       password: 'valid_password'
     }
@@ -112,5 +132,20 @@ describe('DbAddAccount Usecase', () => {
     const isValid = await sut.add(accountData)
 
     expect(isValid).toBe(true)
+  })
+
+  test('Should return false if CheckAccountByEmailRepository returns true', async () => {
+    const { sut, checkByEmailStub } = makeSut()
+  
+    checkByEmailStub.result = true
+  
+    const accountData = {
+      username: 'valid_name',
+      email: 'valid_mail',
+      password: 'valid_password'
+    }
+  
+    const isValid = await sut.add(accountData)
+    expect(isValid).toBe(false)
   })
 })

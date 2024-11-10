@@ -60,14 +60,14 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('name'))
+    expect(httpResponse.body).toEqual(new MissingParamError('username'))
   })
 
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         password: 'mypassword',
         passwordConfirmation: 'mypassword'
       }
@@ -82,7 +82,7 @@ describe('SignUp Controller', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         passwordConfirmation: 'mypassword'
       }
@@ -97,7 +97,7 @@ describe('SignUp Controller', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         password: 'mypassword',
       }
@@ -112,7 +112,7 @@ describe('SignUp Controller', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         password: 'mypassword',
         passwordConfirmation: 'otherpassword'
@@ -130,7 +130,7 @@ describe('SignUp Controller', () => {
 
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'invalid_email@gmail.com',
         password: 'mypassword',
         passwordConfirmation: 'mypassword',
@@ -148,7 +148,7 @@ describe('SignUp Controller', () => {
 
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         password: 'mypassword',
         passwordConfirmation: 'mypassword'
@@ -167,7 +167,7 @@ describe('SignUp Controller', () => {
 
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         password: 'mypassword',
         passwordConfirmation: 'mypassword',
@@ -185,7 +185,7 @@ describe('SignUp Controller', () => {
 
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         password: 'mypassword',
         passwordConfirmation: 'mypassword',
@@ -203,7 +203,7 @@ describe('SignUp Controller', () => {
 
     const httpRequest = {
       body: {
-        name: 'any_name',
+        username: 'any_name',
         email: 'email@gmail.com',
         password: 'mypassword',
         passwordConfirmation: 'mypassword',
@@ -213,7 +213,7 @@ describe('SignUp Controller', () => {
     await sut.handle(httpRequest)
 
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'any_name',
+      username: 'any_name',
       email: 'email@gmail.com',
       password: 'mypassword'
     })
@@ -224,7 +224,7 @@ describe('SignUp Controller', () => {
 
     const httpRequest = {
       body: {
-        name: 'valid_name',
+        username: 'valid_name',
         email: 'valid_email@gmail.com',
         password: 'valid_mypassword',
         passwordConfirmation: 'valid_mypassword',

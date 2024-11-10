@@ -23,7 +23,7 @@ describe('Account Mongo Repository', () => {
     console.log(global.__MONGO_URI__)
     
     const status = await sut.add({
-      name: 'any_name',
+      username: 'any_name',
       email: 'any_mail@mail.com',
       password: 'any_password',
     })
