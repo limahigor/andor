@@ -1,14 +1,14 @@
 module.exports = {
   mongodbMemoryServerOptions: {
     binary: {
-      version: '7.0.3',
+      version: '8.0.3',
       skipMD5: true,
     },
     autoStart: false,
     instance: {
       dbName: 'jest',
     },
-    replicaSet: 'rs0', // Habilita replica set
-    debug: true, // Logs detalhados
+    replicaSet: 'rs0',
+    debug: true,
   },
 };
