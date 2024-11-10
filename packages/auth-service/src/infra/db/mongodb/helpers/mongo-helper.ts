@@ -24,4 +24,10 @@ export const MongoHelper = {
     console.log('Accessing database:', this.client.db().databaseName); // Log para debug
     return this.client.db().collection(name);
   },
+
+  map(collection: any): any {
+    const {_id, collectionWithoutId } = collection
+  
+    return {...collectionWithoutId, id: _id}
+  }
 };
