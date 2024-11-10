@@ -1,12 +1,16 @@
 import { DbLoadAccount } from "./db-load-account"
 import type { LoadAccountRepository, Hasher, CheckAccountByUsernameRepository, LoadAccountModel, Encrypter } from "./db-load-account-protocols"
 
+interface CheckAccountByUsernameRepositoryWithResult extends CheckAccountByUsernameRepository {
+  result: boolean
+}
+
 interface SutTypes {
   sut: DbLoadAccount
   hasherStub: Hasher
   encrypterStub: Encrypter
   loadAccountRepositoryStub: LoadAccountRepository
-  checkByUsernameStub: CheckAccountByUsernameRepository
+  checkByUsernameStub: CheckAccountByUsernameRepositoryWithResult
 }
 
 const makeLoadAccountRepository = (): LoadAccountRepository => {
@@ -48,7 +52,7 @@ const makeHasher = (): Hasher => {
   return new HasherStub()
 }
 
-const makeCheckByUsernameStub = (): CheckAccountByUsernameRepository => {
+const makeCheckByUsernameStub = (): CheckAccountByUsernameRepositoryWithResult => {
   class CheckByUsernameStub implements CheckAccountByUsernameRepository {
     email: string
     result = false
@@ -119,5 +123,19 @@ describe('DbLoadAccount Repository', () => {
       username: 'valid_name',
       password: 'hashed_password'
     })
+  })
+
+  test('Should void null if CheckAccountByUsernameRepository returns true', async () => {
+    const { sut, checkByUsernameStub } = makeSut()
+  
+    checkByUsernameStub.result = true
+  
+    const accountData = {
+      username: 'valid_name',
+      password: 'valid_password'
+    }
+  
+    const isValid = await sut.login(accountData)
+    expect(isValid).toBe('')
   })
 });
