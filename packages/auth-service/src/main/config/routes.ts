@@ -11,7 +11,11 @@ export default async (app: Express): Promise<void> => {
   app.use('/api', router);
 
   const routeFiles = readdirSync(join(__dirname, '../routes')).filter(
-    (file) => !file.endsWith('.map') && !file.endsWith('.test.ts') && !file.endsWith('.spec.ts')
+    (file) =>
+      file.endsWith('.ts') &&
+      !file.endsWith('.map') &&
+      !file.endsWith('.test.ts') &&
+      !file.endsWith('.spec.ts')
   );
 
   await Promise.all(

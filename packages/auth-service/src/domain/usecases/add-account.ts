@@ -3,7 +3,7 @@ export interface AddAccount {
 }
 
 export interface Params {
-  name: string;
+  username: string;
   email: string;
   password: string;
 }

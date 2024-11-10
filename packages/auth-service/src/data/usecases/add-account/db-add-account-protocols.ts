@@ -2,4 +2,6 @@ export type * from "../../protocols/encrypter"
 export type * from "../../protocols/add-account-repository"
 export type * from "../../protocols/add-account-repository"
 export type * as AddAccountModel from "../../protocols/add-account-repository"
+export type { CheckAccountByEmailRepository } from "../../protocols/check-account-by-email-repository";
+export type * from "../../protocols/check-account-by-email-repository"
 export type { AddAccount } from "../../../domain/usecases/add-account"
