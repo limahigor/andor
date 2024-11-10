@@ -1,7 +1,11 @@
 import { DbAddAccount } from "./db-add-account"
-import type { AddAccountModel, AddAccountRepository, CheckAccountByEmailRepository, Encrypter } from "./db-add-account-protocols"
+import type { AddAccountModel, AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByUsernameRepository, Encrypter } from "./db-add-account-protocols"
 
 interface CheckAccountByEmailRepositoryWithResult extends CheckAccountByEmailRepository {
+  result: boolean
+}
+
+interface CheckAccountByUsernameRepositoryWithResult extends CheckAccountByUsernameRepository {
   result: boolean
 }
 
@@ -10,6 +14,7 @@ interface SutTypes {
   encrypterStub: Encrypter
   addAccountRepositoryStub: AddAccountRepository
   checkByEmailStub: CheckAccountByEmailRepositoryWithResult
+  checkByUsernameStub: CheckAccountByUsernameRepositoryWithResult
 }
 
 const makeAddAccountRepository = (): AddAccountRepository => {
@@ -50,13 +55,28 @@ const makeCheckByEmailStub = (): CheckAccountByEmailRepositoryWithResult => {
   return new CheckByEmailStub()
 }
 
+const makeCheckByUsernameStub = (): CheckAccountByUsernameRepositoryWithResult => {
+  class CheckByUsernameStub implements CheckAccountByUsernameRepository {
+    email: string
+    result = false
+
+    async checkByUsername(username: string): Promise<boolean> {
+      this.email = username
+      return this.result
+    }
+  }
+
+  return new CheckByUsernameStub()
+}
+
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypter()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const checkByEmailStub = makeCheckByEmailStub()
-  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub, checkByEmailStub)
+  const checkByUsernameStub = makeCheckByUsernameStub()
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub)
 
-  return { sut, encrypterStub, addAccountRepositoryStub, checkByEmailStub }
+  return { sut, encrypterStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub }
 }
 
 describe('DbAddAccount Usecase', () => {
@@ -138,6 +158,21 @@ describe('DbAddAccount Usecase', () => {
     const { sut, checkByEmailStub } = makeSut()
   
     checkByEmailStub.result = true
+  
+    const accountData = {
+      username: 'valid_name',
+      email: 'valid_mail',
+      password: 'valid_password'
+    }
+  
+    const isValid = await sut.add(accountData)
+    expect(isValid).toBe(false)
+  })
+
+  test('Should return false if CheckAccountByUsernameRepository returns true', async () => {
+    const { sut, checkByUsernameStub } = makeSut()
+  
+    checkByUsernameStub.result = true
   
     const accountData = {
       username: 'valid_name',
