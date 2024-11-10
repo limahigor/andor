@@ -18,9 +18,6 @@ describe('SignUp Routes', () => {
   })
 
   test('Should return true on success', async () => {
-    app.get('/test_cors', (req, res) => {
-      res.send();
-    });
 
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     await request(app)
