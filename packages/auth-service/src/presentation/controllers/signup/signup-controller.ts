@@ -1,7 +1,7 @@
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { MissingParamError, InvalidParamError } from "../../errors"
 import type { EmailValidator, HttpRequest, AddAccount, Controller, HttpResponse } from './signup-protocols'
-import { EmailInUse } from '../../errors/email-in-use-error'
+import { DataInUse } from '../../errors/data-in-use-error'
 
 export class SignUpController implements Controller{
     private readonly emailValidator: EmailValidator
@@ -42,7 +42,7 @@ export class SignUpController implements Controller{
             })
 
             if(!status){
-              return badRequest(new EmailInUse())
+              return badRequest(new DataInUse())
             }
 
             return ok(status)
