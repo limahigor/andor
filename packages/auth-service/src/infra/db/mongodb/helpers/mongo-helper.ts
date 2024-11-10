@@ -4,24 +4,29 @@ import { MongoClient, type Collection } from "mongodb";
 
 export const MongoHelper = {
   client: null as unknown as MongoClient,
+  uri: null as unknown as string,
 
   async connect(uri: string): Promise<void> {
     if (!this.client) {
       const client = new MongoClient(uri);
       await client.connect();
+
       this.client = client;
+      this.uri = uri
     }
   },
 
   async disconnect(): Promise<void> {
-    if (this.client) {
+    if(this.client) {
       await this.client.close();
       this.client = null;
     }
   },
 
-  getCollection(name: string): Collection {
-    console.log('Accessing database:', this.client.db().databaseName); // Log para debug
+  async getCollection(name: string): Promise<Collection> {
+    if(!this.client){
+      await this.connect(this.uri)
+    }
     return this.client.db().collection(name);
   },
 
