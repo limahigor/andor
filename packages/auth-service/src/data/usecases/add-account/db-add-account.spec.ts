@@ -1,5 +1,5 @@
 import { DbAddAccount } from "./db-add-account"
-import type { AddAccountModel, AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByUsernameRepository, Encrypter } from "./db-add-account-protocols"
+import type { AddAccountModel, AddAccountRepository, CheckAccountByEmailRepository, CheckAccountByUsernameRepository, Hasher } from "./db-add-account-protocols"
 
 interface CheckAccountByEmailRepositoryWithResult extends CheckAccountByEmailRepository {
   result: boolean
@@ -11,7 +11,7 @@ interface CheckAccountByUsernameRepositoryWithResult extends CheckAccountByUsern
 
 interface SutTypes {
   sut: DbAddAccount
-  encrypterStub: Encrypter
+  encrypterStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
   checkByEmailStub: CheckAccountByEmailRepositoryWithResult
   checkByUsernameStub: CheckAccountByUsernameRepositoryWithResult
@@ -31,14 +31,14 @@ const makeAddAccountRepository = (): AddAccountRepository => {
   return new AddAccountRepositoryStub()
 }
 
-const makeEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter{
-    async encrypt (value: string): Promise<string>{
+const makeHasher = (): Hasher => {
+  class HasherStub implements Hasher{
+    async hasher (value: string): Promise<string>{
       return 'hashed_password'
     }
   }
 
-  return new EncrypterStub()
+  return new HasherStub()
 }
 
 const makeCheckByEmailStub = (): CheckAccountByEmailRepositoryWithResult => {
@@ -70,19 +70,19 @@ const makeCheckByUsernameStub = (): CheckAccountByUsernameRepositoryWithResult =
 }
 
 const makeSut = (): SutTypes => {
-  const encrypterStub = makeEncrypter()
+  const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const checkByEmailStub = makeCheckByEmailStub()
   const checkByUsernameStub = makeCheckByUsernameStub()
-  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub)
+  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub)
 
-  return { sut, encrypterStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub }
+  return { sut, encrypterStub: hasherStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub }
 }
 
 describe('DbAddAccount Usecase', () => {
   test('Should call Encrypter with correct password', async () => {
-    const { sut, encrypterStub } = makeSut()
-    const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
+    const { sut, encrypterStub: hasherStub } = makeSut()
+    const encryptSpy = jest.spyOn(hasherStub, 'hasher')
 
     const accountData = {
       username: 'valid_name',
@@ -95,8 +95,8 @@ describe('DbAddAccount Usecase', () => {
   })
 
   test('Should throw if Encrypter throws', async () => {
-    const { sut, encrypterStub } = makeSut()
-    jest.spyOn(encrypterStub, 'encrypt').mockReturnValueOnce(Promise.reject(new Error()))
+    const { sut, encrypterStub: hasherStub } = makeSut()
+    jest.spyOn(hasherStub, 'hasher').mockReturnValueOnce(Promise.reject(new Error()))
 
     const accountData = {
       username: 'valid_name',
