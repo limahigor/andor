@@ -11,7 +11,7 @@ interface CheckAccountByUsernameRepositoryWithResult extends CheckAccountByUsern
 
 interface SutTypes {
   sut: DbAddAccount
-  encrypterStub: Hasher
+  hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
   checkByEmailStub: CheckAccountByEmailRepositoryWithResult
   checkByUsernameStub: CheckAccountByUsernameRepositoryWithResult
@@ -76,12 +76,12 @@ const makeSut = (): SutTypes => {
   const checkByUsernameStub = makeCheckByUsernameStub()
   const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub)
 
-  return { sut, encrypterStub: hasherStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub }
+  return { sut, hasherStub, addAccountRepositoryStub, checkByEmailStub, checkByUsernameStub }
 }
 
 describe('DbAddAccount Usecase', () => {
   test('Should call Encrypter with correct password', async () => {
-    const { sut, encrypterStub: hasherStub } = makeSut()
+    const { sut, hasherStub } = makeSut()
     const encryptSpy = jest.spyOn(hasherStub, 'hasher')
 
     const accountData = {
@@ -95,7 +95,7 @@ describe('DbAddAccount Usecase', () => {
   })
 
   test('Should throw if Encrypter throws', async () => {
-    const { sut, encrypterStub: hasherStub } = makeSut()
+    const { sut, hasherStub } = makeSut()
     jest.spyOn(hasherStub, 'hasher').mockReturnValueOnce(Promise.reject(new Error()))
 
     const accountData = {
