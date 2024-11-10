@@ -1,4 +1,4 @@
-import { MissingParamError } from "../../errors"
+import { MissingParamError, ServerError } from "../../errors"
 import { LoginController } from "./signin-controller"
 import type { HttpRequest, LoadAccount, LoadAccountModel } from "./signup-protocols"
 
@@ -12,7 +12,7 @@ const makeLoadAccount = (): LoadAccount => {
     params: LoadAccountModel.LoginParams
     result = 'valid_token'
 
-    async add(params: LoadAccountModel.LoginParams): Promise<LoadAccountModel.LoginResult> {
+    async login(params: LoadAccountModel.LoginParams): Promise<LoadAccountModel.LoginResult> {
       this.params = params
       return this.result
     }
@@ -62,5 +62,23 @@ describe('Signin Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('username/password'))
+  })
+
+  test('Should return 500 if LoadAccount throws', async () => {
+    const { sut, loadAccountStub } = makeSut()
+    jest.spyOn(loadAccountStub, 'login').mockImplementationOnce(async () => await Promise.reject(new Error()))
+
+    const httpRequest = {
+      body: {
+        username: 'any_name',
+        email: 'email@gmail.com',
+        password: 'mypassword',
+        passwordConfirmation: 'mypassword',
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 });
