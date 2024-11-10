@@ -64,6 +64,25 @@ describe('Signin Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('username/password'))
   })
 
+  test('Should call LoadAccount with correct values', async () => {
+    const { sut, loadAccountStub } = makeSut()
+    const loginSpy = jest.spyOn(loadAccountStub, 'login')
+
+    const httpRequest = {
+      body: {
+        username: 'any_name',
+        password: 'mypassword',
+      }
+    }
+
+    await sut.handle(httpRequest)
+
+    expect(loginSpy).toHaveBeenCalledWith({
+      username: 'any_name',
+      password: 'mypassword'
+    })
+  })
+
   test('Should return 500 if LoadAccount throws', async () => {
     const { sut, loadAccountStub } = makeSut()
     jest.spyOn(loadAccountStub, 'login').mockImplementationOnce(async () => await Promise.reject(new Error()))
