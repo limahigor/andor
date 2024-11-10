@@ -21,9 +21,6 @@ export class DbAddAccount implements AddAccount{
       this.checkAccountByUsernameRepository.checkByUsername(accountData.username),
     ]);
 
-    console.log(emailExists)
-    console.log(usernameExists)
-
     if(!emailExists && !usernameExists){
       const hashedPassword = await this.encrypter.encrypt(accountData.password)
       status = await this.addAccountRepository.add({... accountData, password: hashedPassword})

@@ -1,5 +1,5 @@
 export interface LoadAccount {
-  add: (account: LoginParams) => Promise<LoginResult>;
+  login: (account: LoginParams) => Promise<LoginResult>;
 }
 
 export interface LoginParams {
