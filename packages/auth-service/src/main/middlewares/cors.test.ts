@@ -7,7 +7,7 @@ describe('Cors Middleware', () => {
       res.send();
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     await request(app)
       .get('/test_cors')
       .expect('access-control-allow-origin', '*')

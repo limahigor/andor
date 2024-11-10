@@ -7,7 +7,7 @@ describe('Body Parser Middleware', () => {
       res.send(req.body);
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     await request(app)
       .post('/test_body_parser')
       .send({name: 'Higor'})
