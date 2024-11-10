@@ -138,4 +138,16 @@ describe('DbLoadAccount Repository', () => {
     const isValid = await sut.login(accountData)
     expect(isValid).toBe('')
   })
+
+  test('Should return an account on success', async () => {
+    const { sut } = makeSut()
+
+    const accountData = {
+      username: 'valid_name',
+      password: 'valid_password'
+    }
+
+    const isValid = await sut.login(accountData)
+    expect(isValid).toBe('valid_token')
+  })
 });
