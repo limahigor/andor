@@ -1,13 +1,13 @@
 import type { AddAccountModel, AddAccount, AddAccountRepository, Hasher, CheckAccountByEmailRepository, CheckAccountByUsernameRepository } from "./db-add-account-protocols"
 
 export class DbAddAccount implements AddAccount{
-  private readonly encrypter: Hasher
+  private readonly hasher: Hasher
   private readonly addAccountRepository: AddAccountRepository
   private readonly checkAccountByEmailRepository: CheckAccountByEmailRepository
   private readonly checkAccountByUsernameRepository: CheckAccountByUsernameRepository
 
-  constructor (encrypter: Hasher, addAccountRepository: AddAccountRepository, checkAccountByEmailRepository: CheckAccountByEmailRepository, checkAccountByUsernameRepository: CheckAccountByUsernameRepository){
-    this.encrypter = encrypter
+  constructor (hasher: Hasher, addAccountRepository: AddAccountRepository, checkAccountByEmailRepository: CheckAccountByEmailRepository, checkAccountByUsernameRepository: CheckAccountByUsernameRepository){
+    this.hasher = hasher
     this.addAccountRepository = addAccountRepository
     this.checkAccountByEmailRepository = checkAccountByEmailRepository
     this.checkAccountByUsernameRepository = checkAccountByUsernameRepository
@@ -22,7 +22,7 @@ export class DbAddAccount implements AddAccount{
     ]);
 
     if(!emailExists && !usernameExists){
-      const hashedPassword = await this.encrypter.hasher(accountData.password)
+      const hashedPassword = await this.hasher.hasher(accountData.password)
       status = await this.addAccountRepository.add({... accountData, password: hashedPassword})
     }
 

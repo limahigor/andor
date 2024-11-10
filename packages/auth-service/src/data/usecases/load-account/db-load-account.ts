@@ -15,7 +15,7 @@ export class DbLoadAccount implements LoadAccount{
     
 
     async login(loginData: LoadAccountModel.Params): Promise<LoadAccountModel.Result>{
-        const hashed_password = this.hasher.hasher(loginData.password)
+        await this.hasher.hasher(loginData.password)
 
         return ''
     }
