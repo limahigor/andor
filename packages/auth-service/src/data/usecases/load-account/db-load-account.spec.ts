@@ -104,4 +104,20 @@ describe('DbLoadAccount Repository', () => {
     const promise = sut.login(accountData)
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should call LoadAccountRepository with correct data', async () => {
+    const { sut, loadAccountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(loadAccountRepositoryStub, 'login')
+
+    const accountData = {
+      username: 'valid_name',
+      password: 'valid_password'
+    }
+
+    await sut.login(accountData)
+    expect(addSpy).toHaveBeenCalledWith({
+      username: 'valid_name',
+      password: 'hashed_password'
+    })
+  })
 });
