@@ -87,4 +87,12 @@ describe('Account Mongo Repository', () => {
     expect(account?.username).toBe('any_name')
     expect(account?.password).toBe('any_password')
   })
+
+  test('Should loadByUsername return null if user not exist', async () => {
+    const sut = makeSut()
+    
+    const account = await sut.loadByUsername('any_name')
+
+    expect(account).toBeFalsy()
+  })
 })
