@@ -8,17 +8,18 @@
     "start": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
-    "test:unit": "yarn workspace api-gateway test --watch -c jest-unit-config.js",
-    "test:integration": "yarn workspace api-gateway test --watch -c jest-integration-config.js",
-    "test:staged": "yarn workspace api-gateway test --findRelatedTests",
-    "test:ci": "yarn workspace api-gateway test --coverage",
+    "test:unit": "yarn workspace api-gateway-backend test --watch -c jest-unit-config.js",
+    "test:integration": "yarn workspace api-gateway-backend test --watch -c jest-integration-config.js",
+    "test:staged": "yarn workspace api-gateway-backend test --findRelatedTests",
+    "test:ci": "yarn workspace api-gateway-backend test --coverage",
     "pre-commit": "lint-staged"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "express": "^4.21.1"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "^4.3.2",
+    "@types/axios": "^0.14.4",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.8.7",

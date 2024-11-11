@@ -18,7 +18,7 @@ const Signup: React.FC = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		if (token){
+		if (token) {
 			navigate("/");
 		}
 	}, [navigate]);
@@ -63,7 +63,7 @@ const Signup: React.FC = () => {
 							<i className="zmdi zmdi-font"></i>
 						</span>
 
-						<div className="wrap-input100 validate-input" data-validate = "Valid email is: a@b.c">
+						<div className="wrap-input100 validate-input" data-validate="Valid email is: a@b.c">
 							<input
 								className="input100"
 								type="text"
