@@ -1,4 +1,5 @@
 import { MissingParamError, InvalidParamError, ServerError } from "../../errors"
+import { DataInUse } from "../../errors/data-in-use-error"
 import { ok } from "../../helpers/http-helper"
 import { SignUpController } from './signup-controller'
 import type { EmailValidator, HttpRequest, AddAccount, AddAccountModel, } from './signup-protocols'
@@ -140,6 +141,24 @@ describe('SignUp Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+  })
+
+  test('Should return 400 if data in use', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockResolvedValueOnce(false)
+
+    const httpRequest = {
+      body: {
+        username: 'any_name',
+        email: 'invalid_email@gmail.com',
+        password: 'mypassword',
+        passwordConfirmation: 'mypassword',
+      }
+    }
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new DataInUse())
   })
 
   test('Should call EmailValidator with correct email', async () => {
