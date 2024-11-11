@@ -1,4 +1,4 @@
-import { MissingParamError } from "../../errors";
+import { MissingParamError, InvalidUsernameOrPassword } from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
 import type { Controller, HttpRequest, HttpResponse, LoadAccount } from "./signup-protocols";
 
@@ -15,7 +15,7 @@ export class LoginController implements Controller {
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
-          return badRequest(new MissingParamError('username/password'))
+          return badRequest(new MissingParamError(field))
         }
       }
 
@@ -24,9 +24,13 @@ export class LoginController implements Controller {
         password: string;
       };
 
-      await this.loadAccount.login({ username, password })
+      const token = await this.loadAccount.login({ username, password })
 
-      return ok('')
+      if(token === ''){
+        return badRequest(new InvalidUsernameOrPassword())
+      }
+
+      return ok(token)
     } catch (e) {
       return serverError()
     }
