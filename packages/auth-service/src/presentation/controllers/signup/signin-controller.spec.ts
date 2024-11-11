@@ -1,14 +1,18 @@
-import { MissingParamError, ServerError } from "../../errors"
+import { InvalidUsernameOrPassword, MissingParamError, ServerError } from "../../errors"
 import { LoginController } from "./signin-controller"
 import type { HttpRequest, LoadAccount, LoadAccountModel } from "./signup-protocols"
 
 interface SutTypes {
   sut: LoginController
-  loadAccountStub: LoadAccount
+  loadAccountStub: LoadAccountStubWithResult
 }
 
-const makeLoadAccount = (): LoadAccount => {
-  class LoadAccountStub implements LoadAccount {
+interface LoadAccountStubWithResult extends LoadAccount{
+  result: string
+}
+
+const makeLoadAccount = (): LoadAccountStubWithResult => {
+  class LoadAccountStub implements LoadAccountStubWithResult {
     params: LoadAccountModel.LoginParams
     result = 'valid_token'
 
@@ -58,6 +62,23 @@ describe('Signin Controller', () => {
 
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
+  })
+
+  test('Should return 400 if invalid username/password', async () => {
+    const { sut, loadAccountStub } = makeSut()
+    const httpRequest: HttpRequest = {
+      body: {
+        username: 'any_username',
+        password: 'mypassword'
+      }
+    };
+
+    loadAccountStub.result = ''
+
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new InvalidUsernameOrPassword())
   })
 
   test('Should call LoadAccount with correct values', async () => {
