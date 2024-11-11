@@ -12,7 +12,7 @@ const Home: React.FC = () => {
   const [channel, setChannel] = useState('Nenhum');
   const [link, setLink] = useState('');
   const [medias, setMedias] = useState<IMedia[]>([]);
-  
+  const [error, setError] = useState<string | null>(null);
 
   // Exibe ou esconde o modal
   const handleShowMediaModal = () => setShowMediaModal(true);
@@ -24,34 +24,30 @@ const Home: React.FC = () => {
       alert('Por favor, preencha todos os campos!');
       return;
     }
-  
+
     try {
-      console.log('Enviando dados para o backend:', { title, type, channel, link });
-  
       const response = await fetch('/api/media/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, type, channel, link }),
       });
-  
-      console.log('Resposta do servidor (status):', response.status);
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Erro retornado pelo backend:', errorData);
         throw new Error('Erro ao salvar mídia');
       }
-  
+
       const savedMedia = await response.json();
-      console.log('Mídia salva no backend:', savedMedia);
-  
       alert('Mídia salva com sucesso!');
       handleCloseMediaModal();
+
+      // Reseta os campos do formulário
       setTitle('');
       setType('Youtube');
       setChannel('Nenhum');
       setLink('');
-  
+
       // Atualiza a lista de mídias
       fetchMedias();
     } catch (error) {
@@ -59,26 +55,44 @@ const Home: React.FC = () => {
       alert('Erro ao salvar a mídia, tente novamente.');
     }
   };
-  
 
   // Função para buscar mídias do backend
   const fetchMedias = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/media/list');
+      if (!response.ok) {
+        throw new Error('Erro ao buscar mídias.');
+      }
       const data = await response.json();
-      setMedias(data);
+      setMedias(data); // Salva os dados no estado
     } catch (error) {
       console.error('Erro ao buscar mídias:', error);
+      setError('Erro ao carregar as mídias. Tente novamente mais tarde.');
     }
   };
 
-  // Busca as mídias ao montar o componente   
+  // Função para gerar a URL da thumbnail
+  const getThumbnail = (link: string, type: string) => {
+    if (type === 'Youtube') {
+      const videoId = link.split('v=')[1]?.split('&')[0] || link.split('/').pop();
+      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    }
+    return 'https://via.placeholder.com/150'; // Imagem padrão caso não seja YouTube
+  };
+
+  // Busca as mídias ao montar o componente
   useEffect(() => {
     fetchMedias();
   }, []);
 
   return (
     <div className="container mt-4">
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
+
       <section>
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h2>Últimas Mídias</h2>
@@ -87,15 +101,25 @@ const Home: React.FC = () => {
           </button>
         </div>
         <div className="row">
-          {medias.map((media: IMedia, index) => (
+          {medias.map((media, index) => (
             <div className="col-md-3 mb-4" key={index}>
               <div className="card midia-card">
-                <img src="link-da-imagem" className="card-img-top" alt={`Mídia ${index + 1}`} />
+                <img
+                  src={getThumbnail(media.link, media.type)}
+                  className="card-img-top"
+                  alt={media.title || 'Imagem não disponível'}
+                />
                 <div className="card-body">
                   <h5 className="card-title">{media.title}</h5>
                   <p className="card-text">Tipo: {media.type}</p>
-                  <p className="card-text">Canal: {media.channel}</p>
-                  <button className="btn btn-primary">Assistir</button>
+                  <a
+                    href={media.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                  >
+                    Assistir
+                  </a>
                 </div>
               </div>
             </div>
@@ -118,12 +142,18 @@ const Home: React.FC = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Adicionar Nova Mídia</h5>
-                <button type="button" className="btn-close" onClick={handleCloseMediaModal}></button>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={handleCloseMediaModal}
+                ></button>
               </div>
               <div className="modal-body">
                 <form>
                   <div className="mb-3">
-                    <label htmlFor="mediaTitle" className="form-label">Título da Mídia</label>
+                    <label htmlFor="mediaTitle" className="form-label">
+                      Título da Mídia
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -134,7 +164,9 @@ const Home: React.FC = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="mediaType" className="form-label">Canal</label>
+                    <label htmlFor="mediaType" className="form-label">
+                      Canal
+                    </label>
                     <select
                       className="form-select"
                       id="mediaType"
@@ -147,7 +179,9 @@ const Home: React.FC = () => {
                     </select>
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="mediaType" className="form-label">Tipo</label>
+                    <label htmlFor="mediaType" className="form-label">
+                      Tipo
+                    </label>
                     <select
                       className="form-select"
                       id="mediaType"
@@ -160,7 +194,9 @@ const Home: React.FC = () => {
                     </select>
                   </div>
                   <div className="mb-3">
-                    <label htmlFor="mediaLink" className="form-label">Link</label>
+                    <label htmlFor="mediaLink" className="form-label">
+                      Link
+                    </label>
                     <input
                       type="text"
                       className="form-control"
@@ -173,10 +209,18 @@ const Home: React.FC = () => {
                 </form>
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleCloseMediaModal}>
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={handleCloseMediaModal}
+                >
                   Cancelar
                 </button>
-                <button type="button" className="btn btn-primary" onClick={handleSaveMedia}>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleSaveMedia}
+                >
                   Salvar
                 </button>
               </div>

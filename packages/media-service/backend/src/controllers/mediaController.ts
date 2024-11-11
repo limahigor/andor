@@ -4,10 +4,11 @@ import Media from '../models/media';
 // Buscar todas as mídias
 export const getMedias = async (req: Request, res: Response): Promise<void> => {
   try {
-    const medias = await Media.find();
-    res.status(200).json(medias);
+    const medias = await Media.find(); // Busca todas as mídias no banco
+    res.json(medias); // Retorna como JSON
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao buscar mídias', error });
+    console.error('Erro ao buscar mídias:', error);
+    res.status(500).json({ error: 'Erro ao buscar mídias.' });
   }
 };
 
