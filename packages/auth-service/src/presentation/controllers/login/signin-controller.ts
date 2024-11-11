@@ -1,6 +1,6 @@
 import { MissingParamError, InvalidUsernameOrPassword } from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
-import type { Controller, HttpRequest, HttpResponse, LoadAccount } from "./signup-protocols";
+import type { Controller, HttpRequest, HttpResponse, LoadAccount } from "../signup/signup-protocols";
 
 export class LoginController implements Controller {
   private readonly loadAccount: LoadAccount

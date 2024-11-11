@@ -1,6 +1,6 @@
 import { InvalidUsernameOrPassword, MissingParamError, ServerError } from "../../errors"
 import { LoginController } from "./signin-controller"
-import type { HttpRequest, LoadAccount, LoadAccountModel } from "./signup-protocols"
+import type { HttpRequest, LoadAccount, LoadAccountModel } from "./signin-protocols"
 
 interface SutTypes {
   sut: LoginController

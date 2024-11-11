@@ -1,5 +1,5 @@
 import "dotenv/config"
-import { LoginController } from "../../presentation/controllers/signup/signin-controller";
+import { LoginController } from "../../presentation/controllers/login/signin-controller";
 import { AccountMongoRepository } from "../../infra/db/mongodb/account-repository/account";
 import { BcryptAdapter } from "../../infra/cripty/bcrypter-adapt";
 import { DbLoadAccount } from "../../data/usecases/load-account/db-load-account";
