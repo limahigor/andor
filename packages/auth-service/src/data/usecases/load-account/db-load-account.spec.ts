@@ -1,30 +1,11 @@
 import { DbLoadAccount } from "./db-load-account"
-import type { LoadAccountRepository, Hasher, CheckAccountByUsernameRepository, LoadAccountModel, Encrypter } from "./db-load-account-protocols"
-
-interface CheckAccountByUsernameRepositoryWithResult extends CheckAccountByUsernameRepository {
-  result: boolean
-}
+import type { HashComparer, LoadAccountByUsernameRepository, Encrypter, LoadByUsernameResult } from "./db-load-account-protocols"
 
 interface SutTypes {
   sut: DbLoadAccount
-  hasherStub: Hasher
+  comparerStub: HashComparer
   encrypterStub: Encrypter
-  loadAccountRepositoryStub: LoadAccountRepository
-  checkByUsernameStub: CheckAccountByUsernameRepositoryWithResult
-}
-
-const makeLoadAccountRepository = (): LoadAccountRepository => {
-  class LoadAccountRepositoryStub implements LoadAccountRepository {
-    params: LoadAccountModel.Params
-    result = 'valid_id'
-
-    async login(params: LoadAccountModel.Params): Promise<LoadAccountModel.Result> {
-      this.params = params
-      return this.result
-    }
-  }
-
-  return new LoadAccountRepositoryStub()
+  loadByUsernameStub: LoadAccountByUsernameRepository
 }
 
 const makeEncrypterStub = (): Encrypter => {
@@ -41,50 +22,54 @@ const makeEncrypterStub = (): Encrypter => {
   return new EncrypterStub()
 }
 
-const makeHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hasher(value: string): Promise<string> {
-      return 'hashed_password'
+const makeComparer = (): HashComparer => {
+  class HashComparerStub implements HashComparer {
+    result = true
+
+    async compare(plaitext: string, digest: string): Promise<boolean> {
+      return this.result
     }
   }
 
-  return new HasherStub()
+  return new HashComparerStub()
 }
 
-const makeCheckByUsernameStub = (): CheckAccountByUsernameRepositoryWithResult => {
-  class CheckByUsernameStub implements CheckAccountByUsernameRepository {
+const makeLoadByUsernameStub = (): LoadAccountByUsernameRepository => {
+  class LoadAccountByUsernameStub implements LoadAccountByUsernameRepository {
     email: string
-    result = false
+    result = {
+      "id": "valid_id",
+      "username": "valid_username",
+      "password": "hashed_password"
+    }
 
-    async checkByUsername(username: string): Promise<boolean> {
+    async loadByUsername(username: string): Promise<LoadByUsernameResult> {
       this.email = username
       return this.result
     }
   }
 
-  return new CheckByUsernameStub()
+  return new LoadAccountByUsernameStub()
 }
 
 const makeSut = (): SutTypes => {
-  const hasherStub = makeHasher()
+  const comparerStub = makeComparer()
   const encrypterStub = makeEncrypterStub()
-  const loadAccountRepositoryStub = makeLoadAccountRepository()
-  const checkByUsernameStub = makeCheckByUsernameStub()
-  const sut = new DbLoadAccount(hasherStub, encrypterStub, loadAccountRepositoryStub, checkByUsernameStub)
+  const loadByUsernameStub = makeLoadByUsernameStub()
+  const sut = new DbLoadAccount(comparerStub, encrypterStub, loadByUsernameStub)
 
   return {
     sut,
-    hasherStub,
+    comparerStub,
     encrypterStub,
-    loadAccountRepositoryStub,
-    checkByUsernameStub,
+    loadByUsernameStub
   }
 }
 
 describe('DbLoadAccount Repository', () => {
-  test('Should call Hasher with correct password', async () => {
-    const { sut, hasherStub } = makeSut()
-    const hasherSpy = jest.spyOn(hasherStub, 'hasher')
+  test('Should call Comapare with correct password', async () => {
+    const { sut, comparerStub } = makeSut()
+    const comparerSpy = jest.spyOn(comparerStub, 'compare')
 
     const accountData = {
       username: 'valid_name',
@@ -92,12 +77,25 @@ describe('DbLoadAccount Repository', () => {
     }
 
     await sut.login(accountData)
-    expect(hasherSpy).toHaveBeenCalledWith('valid_password')
+    expect(comparerSpy).toHaveBeenCalledWith('valid_password', 'hashed_password')
+  })
+
+  test('Should call LoadByUsername with correct data', async () => {
+    const { sut, loadByUsernameStub } = makeSut()
+    const loadByUsernameSpy = jest.spyOn(loadByUsernameStub, 'loadByUsername')
+
+    const accountData = {
+      username: 'valid_name',
+      password: 'valid_password'
+    }
+
+    await sut.login(accountData)
+    expect(loadByUsernameSpy).toHaveBeenCalledWith('valid_name')
   })
 
   test('Should DbLoadAccount throw if Encrypter throws', async () => {
-    const { sut, hasherStub } = makeSut()
-    jest.spyOn(hasherStub, 'hasher').mockReturnValueOnce(Promise.reject(new Error()))
+    const { sut, comparerStub } = makeSut()
+    jest.spyOn(comparerStub, 'compare').mockReturnValueOnce(Promise.reject(new Error()))
 
     const accountData = {
       username: 'valid_name',
@@ -106,48 +104,6 @@ describe('DbLoadAccount Repository', () => {
 
     const promise = sut.login(accountData)
     await expect(promise).rejects.toThrow()
-  })
-
-  test('Should call LoadAccountRepository with correct data', async () => {
-    const { sut, loadAccountRepositoryStub } = makeSut()
-    const addSpy = jest.spyOn(loadAccountRepositoryStub, 'login')
-
-    const accountData = {
-      username: 'valid_name',
-      password: 'valid_password'
-    }
-
-    await sut.login(accountData)
-    expect(addSpy).toHaveBeenCalledWith({
-      username: 'valid_name',
-      password: 'hashed_password'
-    })
-  })
-
-  test('Should void null if CheckAccountByUsernameRepository returns true', async () => {
-    const { sut, checkByUsernameStub } = makeSut()
-  
-    checkByUsernameStub.result = true
-  
-    const accountData = {
-      username: 'valid_name',
-      password: 'valid_password'
-    }
-  
-    const isValid = await sut.login(accountData)
-    expect(isValid).toBe('')
-  })
-
-  test('Should return an valid token on success', async () => {
-    const { sut } = makeSut()
-
-    const accountData = {
-      username: 'valid_name',
-      password: 'valid_password'
-    }
-
-    const isValid = await sut.login(accountData)
-    expect(isValid).toBe('valid_token')
   })
 
   test('Should call Encrypter with correct data', async () => {
@@ -161,5 +117,17 @@ describe('DbLoadAccount Repository', () => {
 
     await sut.login(accountData)
     expect(encrypterSpy).toHaveBeenCalledWith('valid_id')
+  })
+
+  test('Should return an valid token on success', async () => {
+    const { sut } = makeSut()
+
+    const accountData = {
+      username: 'valid_name',
+      password: 'valid_password'
+    }
+
+    const isValid = await sut.login(accountData)
+    expect(isValid).toBe('valid_token')
   })
 });

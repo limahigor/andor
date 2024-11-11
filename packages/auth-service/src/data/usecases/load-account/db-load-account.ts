@@ -1,28 +1,25 @@
-import type { CheckAccountByUsernameRepository, Encrypter, Hasher, LoadAccount, LoadAccountModel, LoadAccountRepository } from "./db-load-account-protocols";
+import type { LoadAccountByUsernameRepository, Encrypter, HashComparer, LoadAccount, LoadAccountModel } from "./db-load-account-protocols";
 
 export class DbLoadAccount implements LoadAccount {
-  private readonly hasher: Hasher
+  private readonly comparer: HashComparer
   private readonly encrypter: Encrypter
-  private readonly loadAccountRepository: LoadAccountRepository
-  private readonly checkAccountByUsernameRepository: CheckAccountByUsernameRepository
+  private readonly loadAccountByUsernameRepository: LoadAccountByUsernameRepository
 
-  constructor(hasher: Hasher, encrypter: Encrypter, loadAccountRepository: LoadAccountRepository, checkAccountByUsernameRepository: CheckAccountByUsernameRepository) {
-    this.hasher = hasher
+  constructor(comparer: HashComparer, encrypter: Encrypter, loadAccountByUsernameRepository: LoadAccountByUsernameRepository) {
+    this.comparer = comparer
     this.encrypter = encrypter
-    this.loadAccountRepository = loadAccountRepository
-    this.checkAccountByUsernameRepository = checkAccountByUsernameRepository
+    this.loadAccountByUsernameRepository = loadAccountByUsernameRepository
   }
-
 
   async login(loginData: LoadAccountModel.Params): Promise<LoadAccountModel.Result> {
     let status = ''
-    const exists = await this.checkAccountByUsernameRepository.checkByUsername(loginData.username)
 
-    if(!exists){
-      const hashedPassword = await this.hasher.hasher(loginData.password)
-      const validID = await this.loadAccountRepository.login({ ...loginData, password: hashedPassword })
-
-      status = await this.encrypter.encrypt(validID)
+    const account = await this.loadAccountByUsernameRepository.loadByUsername(loginData.username)
+    if(account) {
+      const isValid = await this.comparer.compare(loginData.password, account.password)
+      if (isValid) {
+        status = await this.encrypter.encrypt(account.id)
+      }
     }
 
     return status
