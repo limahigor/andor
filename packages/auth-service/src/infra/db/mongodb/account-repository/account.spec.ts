@@ -20,7 +20,6 @@ describe('Account Mongo Repository', () => {
 
   test('Should add return true on success', async () => {
     const sut = makeSut()
-    console.log(global.__MONGO_URI__)
     
     const status = await sut.add({
       username: 'any_name',
