@@ -117,4 +117,4 @@ describe('Signin Controller', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new ServerError())
   })
-});
+})

@@ -1,4 +1,4 @@
-import { MissingParamError, ServerError } from "../../errors";
+import { MissingParamError } from "../../errors";
 import type { HttpRequest } from "../../protocols";
 import { ValidateTokenController } from "./validate-token-controller";
 import type { ValidateResult, ValidateToken } from "./validate-token-controller-protocols";
@@ -80,7 +80,7 @@ describe('Validate Token Controller', () => {
     expect(validateAccountSpy).toHaveBeenCalledWith('valid_token')
   });
 
-  test('Should return 500 if ValidateToken throws', async () => {
+  test('Should return 401 if ValidateToken throws', async () => {
     const { sut, validateAccountStub } = makeSut();
     jest.spyOn(validateAccountStub, 'validate').mockImplementationOnce(async () => await Promise.reject(new Error()))
 
@@ -92,8 +92,11 @@ describe('Validate Token Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest)
 
-    expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new ServerError())
+    expect(httpResponse.statusCode).toBe(401)
+    expect(httpResponse.body).toEqual({
+      isValid: false,
+      userId: ''
+    })
   });
 
   test('Should return 400 if body is undefined', async () => {
