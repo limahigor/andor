@@ -1,0 +1,20 @@
+{
+  "name": "api-gateway-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "sucrase-node src/main/server.ts",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "yarn workspace api-gateway test --watch -c jest-unit-config.js",
+    "test:integration": "yarn workspace api-gateway test --watch -c jest-integration-config.js",
+    "test:staged": "yarn workspace api-gateway test --findRelatedTests",
+    "test:ci": "yarn workspace api-gateway test --coverage",
+    "pre-commit": "lint-staged"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

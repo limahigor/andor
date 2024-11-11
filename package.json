@@ -12,7 +12,8 @@
     "typescript": "^5.6.3"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/api-gateway/packages/*"
   ],
   "scripts": {
     "postinstall": "husky install"
