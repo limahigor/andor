@@ -29,5 +29,14 @@ describe('SignUp Routes', () => {
         passwordConfirmation: 'teste123'
       })
       .expect(200)
+
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    await request(app)
+      .post('/api/login')
+      .send({
+        username: 'Higor',
+        password: 'teste123',
+      })
+      .expect(200)
   });
 })
