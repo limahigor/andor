@@ -43,8 +43,6 @@ export class AccountMongoRepository implements AddAccountRepository {
       { projection: { _id: 1 } }
     );
 
-    console.log(account !== null)
-  
     return account !== null;
   }
   
