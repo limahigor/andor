@@ -4,6 +4,7 @@ import connectToDatabase from './database';
 import mediaRoutes from './routes/index';
 import cors from 'cors';
 
+
 const app = express();
 const PORT = 3000;
 
@@ -29,7 +30,7 @@ const startServer = async (): Promise<void> => {
 
     // Configurar rotas
     app.use('/api/media', mediaRoutes);
-
+    
     // Rota para a página inicial (index.html)
     app.get('/home/', (req, res) => {
       res.sendFile(path.join(frontendPath, 'index.html'));

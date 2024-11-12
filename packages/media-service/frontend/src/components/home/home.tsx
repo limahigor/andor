@@ -17,11 +17,31 @@ const Home: React.FC = () => {
   // Exibe ou esconde o modal
   const handleShowMediaModal = () => setShowMediaModal(true);
   const handleCloseMediaModal = () => setShowMediaModal(false);
+  
+  // Função para validar o link com base no tipo de mídia
+  const validateLink = (type: string, link: string): boolean => {
+    if (type === 'Youtube') {
+      return link.includes('youtube.com/watch?v=') || link.includes('youtu.be/');
+    }
+    if (type === 'Torrent') {
+      return link.startsWith('magnet:?'); // Verifica se é um magnet link
+    }
+    if (type === 'Google Drive') {
+      return link.includes('drive.google.com');
+    }
+    return false;
+  };
 
   // Função para salvar mídia
   const handleSaveMedia = async () => {
     if (!title || !type || !link) {
       alert('Por favor, preencha todos os campos!');
+      return;
+    }
+
+    // Valida o link antes de salvar
+    if (!validateLink(type, link)) {
+      alert('O link fornecido é inválido para o tipo selecionado.');
       return;
     }
 
@@ -72,12 +92,19 @@ const Home: React.FC = () => {
   };
 
   // Função para gerar a URL da thumbnail
-  const getThumbnail = (link: string, type: string) => {
+  const getThumbnail = (link: string, type: string, title: string) => {
     if (type === 'Youtube') {
       const videoId = link.split('v=')[1]?.split('&')[0] || link.split('/').pop();
       return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
     }
-    return 'https://via.placeholder.com/150'; // Imagem padrão caso não seja YouTube
+    if (type === 'Torrent') {
+      // Gerar uma imagem genérica baseada no título do torrent
+      return `https://via.placeholder.com/150?text=${encodeURIComponent(title)}`;
+    }
+    if (type === 'Google Drive') {
+      return 'https://via.placeholder.com/150?text=Google+Drive'; // Imagem padrão para Google Drive
+    }
+    return 'https://via.placeholder.com/150'; // Imagem padrão para outros tipos
   };
 
   // Busca as mídias ao montar o componente
@@ -105,7 +132,7 @@ const Home: React.FC = () => {
             <div className="col-md-3 mb-4" key={index}>
               <div className="card midia-card">
                 <img
-                  src={getThumbnail(media.link, media.type)}
+                  src={getThumbnail(media.link, media.type, media.title)}
                   className="card-img-top"
                   alt={media.title || 'Imagem não disponível'}
                 />
@@ -230,6 +257,9 @@ const Home: React.FC = () => {
       )}
     </div>
   );
-};
+}
+
 
 export default Home;
+
+     

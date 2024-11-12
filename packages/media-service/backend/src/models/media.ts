@@ -1,4 +1,4 @@
-import mongoose, { type Schema, type Document } from 'mongoose';
+import mongoose, { type Document } from 'mongoose';
 
 export interface IMedia extends Document {
   title: string;
@@ -7,7 +7,7 @@ export interface IMedia extends Document {
   link: string;
 }
 
-const MediaSchema: Schema = new mongoose.Schema({
+const MediaSchema = new mongoose.Schema<IMedia>({
   title: { type: String, required: true },
   type: { type: String, required: true, enum: ['Youtube', 'Torrent', 'Google Drive'] },
   channel: { type: String, required: true, enum: ['Nenhum', 'canal1', 'canal2'], default: 'Nenhum' },
@@ -15,8 +15,15 @@ const MediaSchema: Schema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v: string) => /^https?:\/\/.+$/.test(v),
-      message: (props: { value: string }) => `${props.value} não é uma URL válida!`,
+      validator: function (v: string) {
+        const {type} = (this); // Declara explicitamente que this é do tipo IMedia
+        if (type === 'Torrent') {
+          return v.startsWith('magnet:?'); // Valida links magnéticos
+        }
+        return /^https?:\/\/.+/.test(v); // Valida URLs padrão
+      },
+      message: (props: { value: string }) =>
+        `${props.value} não é um link válido para o tipo selecionado!`,
     },
   },
 });
