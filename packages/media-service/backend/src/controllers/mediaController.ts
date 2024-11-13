@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
-import Media from '../models/media';
+import Media from '../models/media.js';
+
 
 // Buscar todas as mídias
 export const getMedias = async (req: Request, res: Response): Promise<void> => {
@@ -24,3 +25,4 @@ export const createMedia = async (req: Request, res: Response): Promise<void> =>
     res.status(500).json({ message: 'Erro ao salvar mídia', error });
   }
 };
+

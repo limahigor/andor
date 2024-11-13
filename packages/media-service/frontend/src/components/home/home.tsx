@@ -3,8 +3,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
 import { FaPlus } from 'react-icons/fa'; // Ícone de adicionar
 import type { IMedia } from '../../../../backend/src/models/media';
+import { useNavigate } from 'react-router-dom';
 
 const Home: React.FC = () => {
+
+  const navigate = useNavigate();
+  const handleWatchMedia = (link: string) => {
+    navigate(`/player/${encodeURIComponent(link)}`); // Codifica o link para evitar erros de rota
+  };
+  
   // Estados para gerenciar os dados da mídia
   const [showMediaModal, setShowMediaModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -31,7 +38,7 @@ const Home: React.FC = () => {
     }
     return false;
   };
-
+  
   // Função para salvar mídia
   const handleSaveMedia = async () => {
     if (!title || !type || !link) {
@@ -140,10 +147,9 @@ const Home: React.FC = () => {
                   <h5 className="card-title">{media.title}</h5>
                   <p className="card-text">Tipo: {media.type}</p>
                   <a
-                    href={media.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() => handleWatchMedia(media.link)}
                     className="btn btn-primary"
+                    style={{ cursor: 'pointer' }}
                   >
                     Assistir
                   </a>

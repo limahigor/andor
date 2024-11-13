@@ -1,5 +1,5 @@
 import express from 'express';
-import mediaRoutes from './routes/index';
+import mediaRoutes from './routes/index.js';
 
 const app = express();
 

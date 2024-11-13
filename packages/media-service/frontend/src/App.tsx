@@ -1,14 +1,18 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/navbar/Navbar';
 import Home from './components/home/home';
-import Navbar from './components/novbar/Navbar';
+import VideoPlayer from './components/video/VideoPlayer';
 
 const App: React.FC = () => {
   return (
-    <>
+    <Router>
       <Navbar />
-      <Home />
-      {/* Outros componentes podem ser adicionados aqui */}
-    </>
+      <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/player/:link" element={<VideoPlayer />} />
+      </Routes>
+    </Router>
   );
 };
 
