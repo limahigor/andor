@@ -5,11 +5,12 @@ import { FaPlus } from 'react-icons/fa'; // Ícone de adicionar
 import type { IMedia } from '../../../../backend/src/models/media';
 import { useNavigate } from 'react-router-dom';
 
+
 const Home: React.FC = () => {
 
   const navigate = useNavigate();
-  const handleWatchMedia = (link: string) => {
-    navigate(`/player/${encodeURIComponent(link)}`); // Codifica o link para evitar erros de rota
+  const handleWatchMedia = (link: string, type: string) => {
+    navigate(`/player/${encodeURIComponent(link)}/${type}`);
   };
   
   // Estados para gerenciar os dados da mídia
@@ -27,17 +28,26 @@ const Home: React.FC = () => {
   
   // Função para validar o link com base no tipo de mídia
   const validateLink = (type: string, link: string): boolean => {
+    const trimmedLink = link.trim();
+  
     if (type === 'Youtube') {
-      return link.includes('youtube.com/watch?v=') || link.includes('youtu.be/');
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)/;
+      return youtubeRegex.test(trimmedLink);
     }
+  
     if (type === 'Torrent') {
-      return link.startsWith('magnet:?'); // Verifica se é um magnet link
+      const magnetRegex = /^magnet:\?xt=urn:[a-z0-9]+:[a-zA-Z0-9]{32,}/;
+      return magnetRegex.test(trimmedLink);
     }
+  
     if (type === 'Google Drive') {
-      return link.includes('drive.google.com');
+      const googleDriveRegex = /^(https?:\/\/)?(www\.)?drive\.google\.com\/file\/d\/[-\w]{25,}/;
+      return googleDriveRegex.test(trimmedLink);
     }
+  
     return false;
   };
+  
   
   // Função para salvar mídia
   const handleSaveMedia = async () => {
@@ -53,18 +63,19 @@ const Home: React.FC = () => {
     }
 
     try {
-      const response = await fetch('/api/media/create', {
+      const response = await fetch('http://localhost:3000/api/media/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, type, channel, link }),
       });
-
+      console.log('Resposta do backend:', response);
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Erro retornado pelo backend:', errorData);
         throw new Error('Erro ao salvar mídia');
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const savedMedia = await response.json();
       alert('Mídia salva com sucesso!');
       handleCloseMediaModal();
@@ -98,21 +109,37 @@ const Home: React.FC = () => {
     }
   };
 
-  // Função para gerar a URL da thumbnail
   const getThumbnail = (link: string, type: string, title: string) => {
     if (type === 'Youtube') {
-      const videoId = link.split('v=')[1]?.split('&')[0] || link.split('/').pop();
-      return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      try {
+        // Remove espaços extras
+        const trimmedLink = link.trim();
+        
+        // Extrai o ID do vídeo do link
+        const videoId =
+          new URL(trimmedLink).searchParams.get('v') || // Para URLs completas
+          trimmedLink.split('/').pop(); // Para URLs encurtadas como youtu.be
+  
+        if (videoId) {
+          return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        }
+      } catch (error) {
+        console.error('Erro ao extrair ID do vídeo do link:', error);
+      }
+      return 'https://via.placeholder.com/150?text=ID+Inválido'; // Retorno padrão em caso de erro
     }
+  
     if (type === 'Torrent') {
-      // Gerar uma imagem genérica baseada no título do torrent
-      return `https://via.placeholder.com/150?text=${encodeURIComponent(title)}`;
+      return `https://via.placeholder.com/150?text=${encodeURIComponent(title)}+Torrent`;
     }
+  
     if (type === 'Google Drive') {
-      return 'https://via.placeholder.com/150?text=Google+Drive'; // Imagem padrão para Google Drive
+      return `https://via.placeholder.com/150?text=Google+Drive+${encodeURIComponent(title)}`;
     }
-    return 'https://via.placeholder.com/150'; // Imagem padrão para outros tipos
+  
+    return 'https://via.placeholder.com/150'; // Retorno padrão para outros tipos
   };
+  
 
   // Busca as mídias ao montar o componente
   useEffect(() => {
@@ -147,7 +174,7 @@ const Home: React.FC = () => {
                   <h5 className="card-title">{media.title}</h5>
                   <p className="card-text">Tipo: {media.type}</p>
                   <a
-                    onClick={() => handleWatchMedia(media.link)}
+                    onClick={() => handleWatchMedia(media.link, media.type)}
                     className="btn btn-primary"
                     style={{ cursor: 'pointer' }}
                   >

@@ -1,10 +1,13 @@
 import React from 'react';
-import { FaUserCircle } from 'react-icons/fa'; // Ícone de perfil
-import { BsList } from 'react-icons/bs'; // Ícone de menu "sanduíche"
+import { FaUserCircle } from 'react-icons/fa';
+import { BsList } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Navbar.css'; // CSS personalizado
+import './Navbar.css';
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark px-3">
       <button
@@ -18,16 +21,24 @@ const Navbar: React.FC = () => {
       >
         <BsList className="navbar-toggler-icon" />
       </button>
-      <a className="navbar-brand" href="#">
+      <a
+        className="navbar-brand"
+        onClick={() => navigate('/home')}
+        style={{ cursor: 'pointer' }}
+      >
         NOME DO PROJETO
       </a>
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className="nav-link" href="#">Minhas Mídias</a>
+            <a className="nav-link" href="/minhas-midias">
+              Minhas Mídias
+            </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">Meus Canais</a>
+            <a className="nav-link" href="/meus-canais">
+              Meus Canais
+            </a>
           </li>
         </ul>
       </div>
