@@ -7,15 +7,17 @@
     "backend"
   ],
   "scripts": {
-    "dev": "yarn start:all",
+    "dev": "yarn build:all && concurrently \"yarn start:backend\" \"yarn start:frontend\"",
     "start:backend": "cd backend && yarn start",
     "start:frontend": "cd frontend && yarn dev",
-    "start:all": "concurrently \"yarn start:backend\" \"yarn start:frontend\"",
     "build": "yarn workspaces run build",
+    "build:all": "yarn build",
     "lint": "eslint ."
   },
+
   "dependencies": {
     "buffer": "^6.0.3",
+    "concurrently": "^9.1.0",
     "cors": "^2.8.5",
     "webtorrent": "^2.5.5",
     "webtorrent-hybrid": "^6.0.0"

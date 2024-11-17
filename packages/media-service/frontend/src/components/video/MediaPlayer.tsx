@@ -22,7 +22,28 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({ type, link }) => {
       client.add(link, (torrent) => {
         console.log('Torrent carregado:', torrent);
 
-        const file = torrent.files.find((file) => file.name.endsWith('.mp4'));
+        const file = torrent.files.find(
+          (file) =>
+            file.name.endsWith('.mp4') ||
+            file.name.endsWith('.mkv') ||
+            file.name.endsWith('.avi') ||
+            file.name.endsWith('.mov') ||
+            file.name.endsWith('.wmv') ||
+            file.name.endsWith('.flv') ||
+            file.name.endsWith('.webm') ||
+            file.name.endsWith('.ogv') ||
+            file.name.endsWith('.3gp') ||
+            file.name.endsWith('.m4v') ||
+            file.name.endsWith('.mpg') ||
+            file.name.endsWith('.mpeg') ||
+            file.name.endsWith('.ts') ||
+            file.name.endsWith('.f4v') ||
+            file.name.endsWith('.rm') ||
+            file.name.endsWith('.rmvb') ||
+            file.name.endsWith('.asf') ||
+            file.name.endsWith('.vob') ||
+            file.name.endsWith('.divx')
+        );
 
         if (file && videoRef.current) {
           console.log('Reproduzindo arquivo:', file.name);

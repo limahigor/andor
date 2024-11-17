@@ -1,6 +1,5 @@
 import type { Request, Response } from 'express';
 import Media from '../models/media.js';
-import WebTorrent from 'webtorrent';
 
 // Define tipos para `req.body` e `req.query`
 interface CreateMediaBody {
@@ -9,9 +8,6 @@ interface CreateMediaBody {
   link: string;
 }
 
-interface StreamMagnetQuery {
-  magnetURI?: string;
-}
 
 export const getMedias = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -48,51 +44,30 @@ export const createMedia = async (
   }
 };
 
-export const streamMagnet = async (
-  req: Request<unknown, unknown, unknown, StreamMagnetQuery>,
-  res: Response
-): Promise<void> => {
-  // Use desestruturação para req.query
-  const { magnetURI } = req.query;
+export const deleteMediaById = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params; 
+  console.log('ID recebido:', id); // Loga o ID recebido
 
-  if (!magnetURI) {
-    res.status(400).json({ error: 'Magnet URI inválido.' });
+  if (!id) {
+    res.status(400).json({ error: 'ID é obrigatório.' });
     return;
   }
 
-  const client = new WebTorrent();
-
-  client.add(magnetURI, (torrent) => {
-    // Use desestruturação ao acessar arquivos do torrent
-    const file = torrent.files.find(({ name }) => name.endsWith('.mp4'));
-
-    if (!file) {
-      res.status(404).json({ error: 'Nenhum arquivo de vídeo encontrado no torrent.' });
-      client.destroy(); // Certifique-se de liberar recursos
+  try {
+    const media = await Media.findByIdAndDelete(id);
+    if (!media) {
+      console.log('Mídia não encontrada para o ID:', id);
+      res.status(404).json({ error: 'Mídia não encontrada.' });
       return;
     }
 
-    try {
-      // Configura o stream do vídeo
-      res.setHeader('Content-Type', 'video/mp4');
-      const stream = file.createReadStream();
-
-      stream.on('error', (err) => {
-        console.error('Erro ao criar o stream:', err);
-        res.status(500).json({ error: 'Erro ao transmitir o vídeo.' });
-        client.destroy();
-      });
-
-      stream.pipe(res);
-
-      res.on('close', () => {
-        console.log('Conexão fechada pelo cliente.');
-        client.destroy(); // Cleanup ao fechar a conexão
-      });
-    } catch (error) {
-      console.error('Erro no streaming:', error);
-      res.status(500).json({ error: 'Erro no streaming do vídeo.' });
-      client.destroy();
-    }
-  });
+    console.log('Mídia excluída:', media);
+    res.status(200).json({ message: 'Mídia excluída com sucesso.', media });
+  } catch (error) {
+    console.error('Erro ao excluir mídia:', error);
+    res.status(500).json({ error: 'Erro ao excluir mídia.' });
+  }
 };
+
+
+

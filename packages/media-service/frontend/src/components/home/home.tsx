@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
-import { FaPlus } from 'react-icons/fa'; // Ícone de adicionar
+import { FaPlay, FaPlus } from 'react-icons/fa'; // Ícone de adicionar
 import type { IMedia } from '../../../../backend/src/models/media';
 import { useNavigate } from 'react-router-dom';
+
 
 
 const Home: React.FC = () => {
@@ -94,6 +95,8 @@ const Home: React.FC = () => {
     }
   };
 
+  
+  
   // Função para buscar mídias do backend
   const fetchMedias = async () => {
     try {
@@ -108,7 +111,9 @@ const Home: React.FC = () => {
       setError('Erro ao carregar as mídias. Tente novamente mais tarde.');
     }
   };
-
+  
+  
+  
   const getThumbnail = (link: string, type: string, title: string) => {
     if (type === 'Youtube') {
       try {
@@ -139,8 +144,44 @@ const Home: React.FC = () => {
   
     return 'https://via.placeholder.com/150'; // Retorno padrão para outros tipos
   };
-  
 
+  const handleDeleteMedia = async (id: string) => {
+    // Perguntar se o usuário quer realmente excluir
+    const confirmation = window.confirm('Você tem certeza de que deseja excluir esta mídia?');
+    if (!confirmation) {
+      // Se o usuário cancelar, não faz nada
+      return;
+    }
+  
+    try {
+      // Requisição para excluir a mídia
+      const response = await fetch(`http://localhost:3000/api/media/del/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      console.log('Resposta do backend:', response);
+  
+      if (!response.ok) {
+        const errorData = await response.text(); // Leia a resposta
+        console.error('Erro do servidor:', errorData);
+        throw new Error(errorData || 'Erro ao excluir mídia');
+      }
+  
+      // Aviso de sucesso
+      alert('Mídia excluída com sucesso!');
+  
+      // Atualiza a página para refletir a exclusão
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro no frontend:', error);
+      alert('Erro ao excluir mídia');
+  
+    }
+  };
+  
   // Busca as mídias ao montar o componente
   useEffect(() => {
     fetchMedias();
@@ -163,26 +204,27 @@ const Home: React.FC = () => {
         </div>
         <div className="row">
           {medias.map((media, index) => (
-            <div className="col-md-3 mb-4" key={index}>
-              <div className="card midia-card">
+            <div className="col-md-3" key={index}>
+            <div className="card midia-card">
+              <div className="thumbnail-container" onClick={() => handleWatchMedia(media.link, media.type)}>
                 <img
                   src={getThumbnail(media.link, media.type, media.title)}
-                  className="card-img-top"
-                  alt={media.title || 'Imagem não disponível'}
+                  alt={media.title || "Imagem não disponível"}
                 />
-                <div className="card-body">
-                  <h5 className="card-title">{media.title}</h5>
-                  <p className="card-text">Tipo: {media.type}</p>
-                  <a
-                    onClick={() => handleWatchMedia(media.link, media.type)}
-                    className="btn btn-primary"
-                    style={{ cursor: 'pointer' }}
-                  >
-                    Assistir
-                  </a>
+                <div className="play-icon">▶</div>
+              </div>
+              <div className="card-body">
+                <h5 className="card-title">{media.title}</h5>
+                <p className="card-text">Tipo: {media.type}</p>
+                <div>
+                  <button className="btn btn-primary">Alterar</button>
+                  <button className="btn btn-danger" onClick={() => handleDeleteMedia(media._id)}>
+                    Excluir
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
           ))}
         </div>
       </section>

@@ -1,6 +1,7 @@
 import mongoose, { type Document } from 'mongoose';
 
 export interface IMedia extends Document {
+  _id: string;
   title: string;
   type: 'Youtube' | 'Torrent' | 'Google Drive';
   channel: 'Nenhum' | 'canal1' | 'canal2';

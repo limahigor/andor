@@ -1,13 +1,12 @@
 import { Router } from 'express';
-import { getMedias, createMedia, streamMagnet } from '../controllers/mediaController.js';
+import { getMedias, createMedia, deleteMediaById } from '../controllers/mediaController.js';
 
 
 const router = Router();
 
 router.get('/list', getMedias);
 router.post('/create', createMedia);
-router.get('/stream', streamMagnet);
-// router.get('/stream/clean', cleanUpTorrent);
-
-
+router.delete('/del/:id', deleteMediaById);
+ 
+  
 export default router;
