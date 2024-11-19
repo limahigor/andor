@@ -6,10 +6,12 @@
     "backend"
   ],
   "scripts": {
-    "dev": "yarn build:all && concurrently \"yarn start:backend\"",
-    "start:backend": "cd backend && yarn start",
+    "dev": "yarn build && concurrently \"yarn start:backend\"",
+    "start": "yarn start:backend",
+    "start:backend": "cd backend && node dist/server.js",
     "build": "yarn workspaces run build",
-    "build:all": "yarn build",
+    "build:all": "yarn workspaces run build",
+    "start:all": "concurrently \"yarn workspace backend start\"",
     "lint": "eslint ."
   },
   "dependencies": {

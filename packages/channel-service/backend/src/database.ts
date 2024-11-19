@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export const connectToDatabase = async (): Promise<void> => {
   try {
-    const MONGO_URI = "mongodb+srv://joseandersonsilv4:<masterkey>@channel-service.j4tmc.mongodb.net/?retryWrites=true&w=majority&appName=channel-service";
+    const MONGO_URI = "mongodb+srv://joseandersonsilv4:hXjyAqSDiop4tAKi@channel-service.j4tmc.mongodb.net/?retryWrites=true&w=majority&appName=channel-service";
     await mongoose.connect(MONGO_URI, {
     });
     console.log('Conectado ao MongoDB channel-service');

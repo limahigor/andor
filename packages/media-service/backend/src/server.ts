@@ -1,16 +1,11 @@
 import express from 'express';
-import path from 'path';
 import connectToDatabase from './database.js';
 import mediaRoutes from './routes/index.js';
 import cors from 'cors';
-import { fileURLToPath } from 'url';
 
 
 const app = express();
 const PORT = 3000;
-
-const FILENAME = fileURLToPath(import.meta.url);
-const DIRNAME = path.dirname(FILENAME);
 
 // Iniciar servidor
 const startServer = async (): Promise<void> => {
@@ -28,17 +23,8 @@ const startServer = async (): Promise<void> => {
       allowedHeaders: ['Content-Type'], // Headers permitidos
     }));
 
-    // Servir arquivos estáticos do frontend
-    const frontendPath = path.join(DIRNAME, '../../frontend/dist');
-    app.use(express.static(frontendPath));
-
     // Configurar rotas
     app.use('/api/media', mediaRoutes);
-    
-    // Rota para a página inicial (index.html)
-    app.get('/home/', (req, res) => {
-      res.sendFile(path.join(frontendPath, 'index.html'));
-    });
 
     // Iniciar servidor
     app.listen(PORT, () => {

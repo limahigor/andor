@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { deleteMediasByChannelId } from '../clients/mediaServiceClient'; 
+import { deleteMediasByChannelId } from '../clients/mediaServiceClient.js'; 
 
 export interface IChannel extends Document {
   name: string;

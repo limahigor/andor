@@ -14,7 +14,7 @@
     "start:media-service": "cd media-service && yarn start",
     "build": "yarn workspaces run build",
     "build:all": "yarn build",
-    "lint": "eslint ."
+    "lint:backend": "eslint backend/src/**/*.ts --fix"
   },
 
   "dependencies": {

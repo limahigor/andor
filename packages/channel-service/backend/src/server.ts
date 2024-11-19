@@ -28,17 +28,8 @@ const startServer = async (): Promise<void> => {
       allowedHeaders: ['Content-Type'], // Headers permitidos
     }));
 
-    // Servir arquivos estáticos do frontend
-    const frontendPath = path.join(DIRNAME, '../../../media-service/frontend/dist');
-    app.use(express.static(frontendPath));
-
     // Configurar rotas
     app.use('/api/channel', mediaRoutes);
-    
-    // Rota para a página inicial (index.html)
-    app.get('/home/', (req, res) => {
-      res.sendFile(path.join(frontendPath, 'index.html'));
-    });
 
     // Iniciar servidor
     app.listen(PORT, () => {

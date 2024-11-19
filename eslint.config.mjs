@@ -1,4 +1,4 @@
-import love from 'eslint-config-love'
+import love from 'eslint-config-love';
 
 export default [
   {
@@ -10,7 +10,7 @@ export default [
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-magic-numbers": "off",
-      "@typescript-eslint/prefer-destructuring": "off"
+      "@typescript-eslint/prefer-destructuring": "off",
     },
   },
-]
+];
