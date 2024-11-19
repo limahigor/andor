@@ -26,6 +26,14 @@
 		{
 			"name": "api-gateway-backend",
 			"path": "packages/api-gateway/packages/backend"
+		},
+		{
+			"name": "channel-service",
+			"path": "packages/channel-service"
+		},
+		{
+			"name": "frontend",
+			"path": "packages/frontend"
 		}
 	],
 }
