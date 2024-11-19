@@ -8,6 +8,10 @@
 			"path": "packages/auth-service"
 		},
 		{
+			"name": "api-gateway",
+			"path": "packages/api-gateway"
+		},
+		{
 			"name": "media-service",
 			"path": "packages/media-service"
 		},
