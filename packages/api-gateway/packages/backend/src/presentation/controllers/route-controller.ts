@@ -11,7 +11,7 @@ export class RouteController implements Controller{
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse>{
     try{
-
+      console.log(httpRequest)
       const response = await this.routeFowarded.route(httpRequest)
 
       return response

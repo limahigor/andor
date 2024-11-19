@@ -9,14 +9,14 @@ import "./utils.css";
 const LoginForm: React.FC = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-	const [setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
-	const gatewayUrl = "http://localhost:5050/api/login";
+	const gatewayUrl = "http://localhost:5051/api/login";
 
 	const navigate = useNavigate();
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		if (token){
+		if (token) {
 			navigate("/");
 		}
 	}, [navigate]);
@@ -35,16 +35,14 @@ const LoginForm: React.FC = () => {
 
 			if (response.ok) {
 				const data = await response.json();
-				console.log("Login realizado com sucesso: ", data);
 				localStorage.setItem("token", data);
 
 				window.location.href = "/";
 			} else {
 				const errorData = await response.json();
 				setErrorMessage(errorData.message || "Erro ao fazer login");
-				alert("Login nao realizado " + errorData.name);
 			}
-			console.log("Login realizado com sucesso: ");
+			console.log("Login realizado com sucesso");
 		} catch (error) {
 			console.error("Erro na requisição:", error);
 			setErrorMessage("Falha na conexão com o servidor.");
@@ -57,7 +55,7 @@ const LoginForm: React.FC = () => {
 				<div className="wrap-login100">
 					<form className="login100-form validate-form">
 						<span className="login100-form-title p-b-26">
-							Welcome
+							Login
 						</span>
 						<span className="login100-form-title p-b-48">
 							<i className="zmdi zmdi-font"></i>
@@ -97,6 +95,22 @@ const LoginForm: React.FC = () => {
 									Login
 								</button>
 							</div>
+
+							{errorMessage && (
+								<div
+									style={{
+										marginTop: "10px",
+										display: "block",
+									}}
+								>
+									<p style={{
+										color: "red",
+										fontSize: "14px"
+									}}>
+										{errorMessage}
+									</p>
+								</div>
+							)}
 						</div>
 
 						<div className="text-center p-t-115">

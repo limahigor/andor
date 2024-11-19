@@ -120,7 +120,7 @@ describe("Private Route Fowarded", () => {
     jest.spyOn(axiosAdapterStub, "request")
       .mockResolvedValueOnce({
         statusCode: 200,
-        body: { isValid: true, userId: 'valid_id' },
+        body: { isValid: true, userId: { id: 'valid_id' } },
       })
       .mockResolvedValueOnce({
         statusCode: 200,
@@ -131,7 +131,7 @@ describe("Private Route Fowarded", () => {
 
     await sut.route(httpRequest);
 
-    const expectedUrl = `${process.env.AUTH_SERVICE_URL ?? "http://localhost:4000"}/validate-token`;
+    const expectedUrl = `${process.env.AUTH_SERVICE_URL ?? "http://localhost:4000"}/validate`;
 
     expect(axiosAdapterSpy).toHaveBeenNthCalledWith(1, {
       method: "POST",
