@@ -18,6 +18,5 @@ export class RouteController implements Controller{
     }catch(error){
       return serverError()
     }
-    
   }
 }
