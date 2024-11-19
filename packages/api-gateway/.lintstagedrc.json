@@ -1,6 +1,0 @@
-{
-  "*.ts": [
-    "eslint 'src/**' --fix",
-    "yarn workspace auth-service run test:staged"
-  ]
-}
