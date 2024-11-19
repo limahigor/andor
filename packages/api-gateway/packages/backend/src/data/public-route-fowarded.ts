@@ -18,8 +18,8 @@ export class PublicRouteFowarded implements RouteFowarded {
       url: this.routeModel.uri,
       body: request.body
     }
+    
     const response = await this.axiosAdapter.request(httpRequest)
-
     return response
   }
 }

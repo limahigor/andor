@@ -19,6 +19,9 @@ export class AxiosAdapter {
       url: data.url,
       method: data.method,
       data: data.body,
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
     };
 
     const axiosResponse: AxiosResponse = await axios(axiosConfig);

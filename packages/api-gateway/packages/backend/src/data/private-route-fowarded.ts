@@ -36,7 +36,6 @@ export class PrivateRouteFowarded implements RouteFowarded {
     const responseAuthRequest = await this.axiosAdapter.request(authRequest);
   
     if (responseAuthRequest.statusCode === 200 && responseAuthRequest.body.isValid) {
-      console.log(responseAuthRequest)
       const httpRequest = {
         method: this.routeModel.method,
         url: this.routeModel.uri,
