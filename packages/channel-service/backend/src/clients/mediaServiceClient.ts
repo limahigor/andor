@@ -6,12 +6,12 @@ export const deleteMediasByChannelId = async (channelId: string): Promise<void> 
     try {
       const response = await axios.delete(`${MEDIA_SERVICE_URL}/mediaId/${channelId}`);
       console.log(`Mídias associadas ao canal ${channelId} foram excluídas.`, response.data);
-    } catch (error) {
-      console.error('Erro ao excluir mídias associadas no media-service:', error);
+    } catch (error: unknown) {
       if (axios.isAxiosError(error) && error.response) {
-        console.error(`Erro do servidor: ${error.response.status} - ${error.response.data}`);
+        console.error(`Erro do servidor: ${error.response.status} - ${JSON.stringify(error.response.data)}`);
+      } else {
+        console.error('Erro desconhecido:', error);
       }
-      throw new Error('Falha ao excluir mídias associadas no media-service.');
     }
-  };
+  }
   

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css';
 import { FaPlay, FaPlus } from 'react-icons/fa'; // Ícone de adicionar
-import type { IMedia } from '../../../../backend/src/models/media';
+import { mediaClient, Media } from '../../client/mediaClient';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
   const [type, setType] = useState('Youtube');
   const [channel, setChannel] = useState('Nenhum');
   const [link, setLink] = useState('');
-  const [medias, setMedias] = useState<IMedia[]>([]);
+  const [medias, setMedias] = useState<Media[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   // Exibe ou esconde o modal
@@ -218,7 +218,7 @@ const Home: React.FC = () => {
                 <p className="card-text">Tipo: {media.type}</p>
                 <div>
                   <button className="btn btn-primary">Alterar</button>
-                  <button className="btn btn-danger" onClick={() => handleDeleteMedia(media._id)}>
+                  <button className="btn btn-danger" onClick={() => handleDeleteMedia(media._id || '')}>
                     Excluir
                   </button>
                 </div>
