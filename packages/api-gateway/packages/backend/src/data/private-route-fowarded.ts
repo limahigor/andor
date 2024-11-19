@@ -29,7 +29,7 @@ export class PrivateRouteFowarded implements RouteFowarded {
   
     const authRequest = {
       method: "POST",
-      url: `${authServiceUrl}/validate-token`, // Construção dinâmica da URL
+      url: `${authServiceUrl}/validate`, // Construção dinâmica da URL
       body: token,
     }
   
@@ -39,7 +39,7 @@ export class PrivateRouteFowarded implements RouteFowarded {
       const httpRequest = {
         method: this.routeModel.method,
         url: this.routeModel.uri,
-        body: { ...request.body, userId: responseAuthRequest.body.userId },
+        body: { ...request.body, userId: responseAuthRequest.body.userId.id },
       };
   
       const response = await this.axiosAdapter.request(httpRequest);

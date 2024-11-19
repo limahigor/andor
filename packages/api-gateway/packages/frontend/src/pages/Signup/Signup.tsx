@@ -11,9 +11,9 @@ const Signup: React.FC = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 	const [passwordConfirmation, setPasswordConfirmation] = useState("");
-	const [setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 
-	const gatewayUrl = "http://localhost:5050/api/signup";
+	const gatewayUrl = "http://localhost:5051/api/signup";
 
 	const navigate = useNavigate();
 	useEffect(() => {
@@ -36,17 +36,16 @@ const Signup: React.FC = () => {
 			});
 
 			if (response.ok) {
-				const data = await response.json();
-				console.log("Login realizado com sucesso:", data);
-				localStorage.setItem("token", data);
+				await response.json();
 
-				window.location.href = "/";
+				window.location.href = "/login";
 			} else {
 				const errorData = await response.json();
-				setErrorMessage(errorData.message || "Erro ao fazer login");
+				console.log(errorData)
+				setErrorMessage(errorData.message);
 			}
 		} catch (error) {
-			console.error("Erro na requisição:", error);
+			console.log("Erro na requisição:", error);
 			setErrorMessage("Falha na conexão com o servidor.");
 		}
 	};
@@ -57,7 +56,7 @@ const Signup: React.FC = () => {
 				<div className="wrap-login100">
 					<form className="login100-form validate-form">
 						<span className="login100-form-title p-b-26">
-							Welcome
+							Signup
 						</span>
 						<span className="login100-form-title p-b-48">
 							<i className="zmdi zmdi-font"></i>
@@ -124,11 +123,27 @@ const Signup: React.FC = () => {
 									Sign Up
 								</button>
 							</div>
+
+							{errorMessage && (
+								<div
+									style={{
+										marginTop: "10px",
+										display: "block",
+									}}
+								>
+									<p style={{
+										color: "red",
+										fontSize: "14px"
+									}}>
+										{errorMessage}
+									</p>
+								</div>
+							)}
 						</div>
 					</form>
 				</div>
-			</div>
-		</div>
+			</div >
+		</div >
 	);
 };
 
