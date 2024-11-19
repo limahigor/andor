@@ -38,7 +38,7 @@ const makeSut = (route: RouteModel): SutTypes => {
 describe("PublicRouteFowarded", () => {
   test('Should AxiosAdapter with correct data', async () => {
     const routeModel: RouteModel = {
-      uri: "http://example.com/login",
+      uri: "http://localhost:8080/login",
       method: "POST",
       authorization: false,
     };
@@ -97,7 +97,7 @@ describe("PublicRouteFowarded", () => {
 
     jest.spyOn(axiosAdapterStub, "request").mockRejectedValue(new Error())
     const response = sut.route(httpRequest)
-    
+
     await expect(response).rejects.toThrow()
   });
 });
