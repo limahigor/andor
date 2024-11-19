@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 const FILENAME = fileURLToPath(import.meta.url);
 const DIRNAME = path.dirname(FILENAME);
@@ -16,7 +16,7 @@ const DIRNAME = path.dirname(FILENAME);
 const startServer = async (): Promise<void> => {
   try {
     await connectToDatabase();
-    console.log('Conexão com o banco de dados estabelecida media-service.');
+    console.log('Conexão com o banco de dados estabelecida channel-service.');
 
     // Middleware para JSON
     app.use(express.json());
@@ -29,11 +29,11 @@ const startServer = async (): Promise<void> => {
     }));
 
     // Servir arquivos estáticos do frontend
-    const frontendPath = path.join(DIRNAME, '../../frontend/dist');
+    const frontendPath = path.join(DIRNAME, '../../../media-service/frontend/dist');
     app.use(express.static(frontendPath));
 
     // Configurar rotas
-    app.use('/api/media', mediaRoutes);
+    app.use('/api/channel', mediaRoutes);
     
     // Rota para a página inicial (index.html)
     app.get('/home/', (req, res) => {
@@ -42,13 +42,13 @@ const startServer = async (): Promise<void> => {
 
     // Iniciar servidor
     app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta media-service${PORT}`);
+      console.log(`Servidor rodando na porta do channel-service${PORT}`);
     }).on('error', (error) => {
-      console.error('Erro ao iniciar o servidor media-service.:', error);
+      console.error('Erro ao iniciar o servidor channel-service:', error);
     });
 
   } catch (error) {
-    console.error('Erro geral no servidor media-service:', error);
+    console.error('Erro geral no servidor channel-service:', error);
   }
 };
 

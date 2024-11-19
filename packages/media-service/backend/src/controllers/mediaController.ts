@@ -70,4 +70,31 @@ export const deleteMediaById = async (req: Request, res: Response): Promise<void
 };
 
 
+export const getMediasById = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
 
+  try {
+    const media = await Media.findById(id);
+    if (!media) {
+      res.status(404).json({ error: 'Mídia não encontrada.' });
+      return;
+    }
+
+    res.status(200).json(media);
+  } catch (error) {
+    console.error('Erro ao buscar mídia:', error);
+    res.status(500).json({ error: 'Erro ao buscar mídia.' });
+  }
+};
+
+export const deleteMediasByChannel = async (req: Request, res: Response): Promise<void> => {
+  const { channelId } = req.params;
+
+  try {
+    await Media.deleteMany({ channel: channelId }); // Supondo que `channel` é um campo na coleção Media
+    res.status(200).json({ message: 'Mídias associadas excluídas com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao excluir mídias:', error);
+    res.status(500).json({ error: 'Erro ao excluir mídias associadas.' });
+  }
+};
