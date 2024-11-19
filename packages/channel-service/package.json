@@ -3,13 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
-    "frontend",
     "backend"
   ],
   "scripts": {
-    "dev": "yarn build:all && concurrently \"yarn start:backend\" \"yarn start:frontend\"",
+    "dev": "yarn build:all && concurrently \"yarn start:backend\"",
     "start:backend": "cd backend && yarn start",
-    "start:frontend": "cd frontend && yarn dev",
     "build": "yarn workspaces run build",
     "build:all": "yarn build",
     "lint": "eslint ."
