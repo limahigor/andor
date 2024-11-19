@@ -3,7 +3,10 @@ export interface HttpResponse {
   body: any
 }
 
-export interface HttpRequest<T = any, U = any> {
-  headers?: U
+export interface HttpRequest<T = any> {
+  headers?: {
+    authorization?: string;
+    [key: string]: any;
+  };
   body?: T
 }

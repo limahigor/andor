@@ -23,3 +23,8 @@ export const unauthorized = (): HttpResponse => ({
     userId: ''
   }
 })
+
+export const notFound = (): HttpResponse => ({
+  statusCode: 404,
+  body: ''
+})
