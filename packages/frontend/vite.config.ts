@@ -31,5 +31,17 @@ export default defineConfig(({ mode }) => {
         ],
       },
     },
+    css: {
+      preprocessorOptions: {
+        css: {
+          additionalData: '@import "font-awesome/css/font-awesome.min.css";',
+        },
+      },
+    },
+    build: {
+      rollupOptions: {
+        external: ['font-awesome/css/font-awesome.min.css'], // Exclui explicitamente do build
+      },
+    },
   };
 });
