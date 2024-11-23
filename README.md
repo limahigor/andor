@@ -65,9 +65,10 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 
 ### Serviços Disponíveis:
 - **Frontend**: [http://localhost:5173](http://localhost:5173)
-- **API Gateway**: [http://localhost:5050](http://localhost:5050)
-- **Media Service**: [http://localhost:5051](http://localhost:5051)
-- **Auth Service**: [http://localhost:5052](http://localhost:5052)
+- **API Gateway**: [http://localhost:5051](http://localhost:5051)
+- **Media Service**: [http://localhost:3000](http://localhost:3000)
+- **Auth Service**: [http://localhost:5050](http://localhost:5050)
+- **Channel Service**: [http://localhost:4000](http://localhost:4000)
 
 ---
 
@@ -81,8 +82,7 @@ Certifique-se de ter as seguintes ferramentas instaladas:
   ```
 
 - **Erros Comuns**:
-  - Se algum serviço não iniciar corretamente, reinstale as dependências:
+  - Se algum serviço não iniciar corretamente, apague as pastas node_modules e reinstale as dependências:
     ```bash
-    yarn clean
     yarn install
     ```
