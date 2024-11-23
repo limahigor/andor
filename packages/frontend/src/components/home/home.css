@@ -1,0 +1,209 @@
+   .canal-card .btn:hover {
+    background-color: #f42c28; /* Cor mais clara no hover */
+  }
+  
+  .App {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .open-modal-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  /* Sobreposição do Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Fundo preto com opacidade reduzida */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Conteúdo do Modal */
+  .modal-content {
+    background-color: #1c1c1c; /* Fundo do modal em preto */
+    color: #fff; /* Texto branco para contraste */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+  }
+  
+  /* Estilizando os botões na seção de footer do modal */
+.modal-footer .btn {
+  padding: 7px 20px; /* Aumenta o tamanho do botão */
+  margin-right: 10px; /* Adiciona espaço entre os botões */
+}
+
+.modal-footer .btn:last-child {
+  margin-right: 0; /* Remove a margem do último botão (Salvar) */
+}
+
+
+/* Ajusta o fundo geral */
+body {
+  background-color: #1c1c1c; /* Fundo preto */
+  color: #ffffff; /* Texto branco */
+}
+
+.midia-card {
+  background-color: #2b2b2b; /* Fundo escuro do card */
+  color: #afaaaa; /* Texto claro */
+  border-radius: 10px; /* Bordas arredondadas */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Sombra suave */
+  overflow: hidden; /* Garante que elementos não saiam do card */
+  height: 100%; /* Ajusta a altura total */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.midia-card img {
+  object-fit: cover;
+  width: 100%;
+  height: 220px; /* Aumenta o tamanho da imagem */
+  border-radius: 10px 10px 0 0; /* Arredonda somente a parte superior */
+}
+
+.midia-card .card-body {
+  padding: 8px 16px; /* Reduz o espaçamento interno */
+  flex-grow: 0;
+  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.midia-card .card-body h5 {
+  font-size: 16px; /* Ajusta o tamanho do título */
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.midia-card .card-body h5 {
+  font-size: 16px; /* Ajusta o tamanho do título */
+  margin-bottom: 8px;
+  color: #ffffff;
+}
+
+.midia-card .card-body p {
+  font-size: 14px; /* Ajusta o tamanho do texto de descrição */
+  margin-bottom: 16px;
+  color: #cfcfcf; /* Cor mais clara */
+}
+
+.midia-card .card-body .btn {
+  font-size: 14px; /* Botões menores */
+  padding: 6px 12px; /* Ajusta o padding dos botões */
+}
+
+.midia-card .card-body .btn-primary {
+  margin-right: 8px; /* Espaço entre os botões */
+}
+
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Espaçamento entre os cartões */
+  justify-content: center; /* Centraliza os cartões */
+}
+
+.col-md-3 {
+  flex: 1 1 calc(20% - 16px); /* Calcula o tamanho para caber 5 cartões por linha */
+  max-width: calc(20% - 16px); /* Largura máxima dos cartões */
+  box-sizing: border-box;
+}
+
+@media (max-width: 1200px) {
+  .col-md-3 {
+    flex: 1 1 calc(25% - 16px); /* Ajusta para 4 cartões por linha em telas menores */
+    max-width: calc(25% - 16px);
+  }
+}
+
+@media (max-width: 992px) {
+  .col-md-3 {
+    flex: 1 1 calc(33.33% - 16px); /* Ajusta para 3 cartões por linha em tablets */
+    max-width: calc(33.33% - 16px);
+  }
+}
+
+@media (max-width: 768px) {
+  .col-md-3 {
+    flex: 1 1 calc(50% - 16px); /* Ajusta para 2 cartões por linha em celulares grandes */
+    max-width: calc(50% - 16px);
+  }
+}
+
+@media (max-width: 576px) {
+  .col-md-3 {
+    flex: 1 1 100%; /* Ajusta para 1 cartão por linha em celulares pequenos */
+    max-width: 100%;
+  }
+}
+
+.midia-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.midia-card img {
+  object-fit: cover;
+  width: 100%;
+  height: 180px; /* Tamanho uniforme para as imagens */
+  border-radius: 8px;
+}
+
+.midia-card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.midia-card .btn {
+  margin: 5px 0; /* Adiciona espaço entre os botões */
+}
+.thumbnail-container img {
+  border-radius: 8px 8px 0 0;
+}
+.thumbnail-container {
+  position: relative;
+  cursor: pointer;
+
+}
+
+.thumbnail-container img {
+  transition: transform 0.3s ease; /* Suavizar o zoom */
+}
+
+.thumbnail-container:hover img {
+  transform: scale(1.1); /* Zoom na imagem */
+}
+
+.thumbnail-container .play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px; /* Tamanho do ícone */
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-container:hover .play-icon {
+  opacity: 1; /* Ícone aparece ao passar o mouse */
+}

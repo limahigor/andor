@@ -1,0 +1,6 @@
+{
+  "*.ts": [
+    "eslint 'src/**' --fix",
+    "yarn workspace api-gateway-backend run test:staged"
+  ]
+}
