@@ -7,7 +7,7 @@
     "packages/**/backend"
   ],
   "scripts": {
-    "dev": "yarn build:all && concurrently \"yarn workspace api-gateway start\" \"yarn workspace media-service start\" \"yarn workspace auth-service start\" \"yarn workspace frontend dev\" \"yarn workspace channel-service start\"",
+    "start": "yarn build:all && concurrently \"yarn workspace api-gateway start\" \"yarn workspace media-service start\" \"yarn workspace auth-service start\" \"yarn workspace frontend dev\" \"yarn workspace channel-service start\"",
     "build": "yarn workspaces run build",
     "build:all": "yarn build",
     "start:api-gateway": "yarn workspace api-gateway start",
