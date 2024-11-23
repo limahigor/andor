@@ -5,13 +5,17 @@
   "workspaces": [
     "frontend",
     "channel-service",
-    "media-service"
+    "media-service",
+    "auth-service",
+    "api-gateway"
   ],
   "scripts": {
-    "dev": "yarn build:all && concurrently \"yarn start:channel-service\" \"yarn start:media-service\" \"yarn start:frontend\"",
+    "dev": "yarn build:all && concurrently \"yarn start:api-gateway\" \"yarn start:media-service\" \"yarn start:frontend\" \"yarn start:auth-service\"",
     "start:channel-service": "cd channel-service && yarn start ",
     "start:frontend": "cd frontend && yarn dev",
     "start:media-service": "cd media-service && yarn start",
+    "start:auth-service": "cd auth-service && yarn start",
+    "start:api-gateway": "cd api-gateway && yarn start",
     "build": "yarn workspaces run build",
     "build:all": "yarn build",
     "lint:backend": "eslint backend/src/**/*.ts --fix"

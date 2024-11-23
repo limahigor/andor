@@ -8,9 +8,9 @@ const authServiceUrl: string = process.env.AUTH_SERVICE_URL ?? "http://localhost
 
 export default (router: Router): void => {
   const routeModel = {
-    uri: `${authServiceUrl}/api/login`,
+    uri: `${authServiceUrl}/api/validate`,
     method: "POST",
     authorization: false
   }
-  router.post('/login', adaptRoute(makePublicRouteController(routeModel)))
+  router.post('/validate', adaptRoute(makePublicRouteController(routeModel)))
 }

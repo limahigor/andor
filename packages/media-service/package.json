@@ -5,6 +5,15 @@
   "workspaces": [
     "backend"
   ],
+  "scripts": {
+    "dev": "yarn build && concurrently \"yarn start:backend\"",
+    "start": "yarn start:backend",
+    "start:backend": "cd backend && node dist/server.js",
+    "build": "yarn workspaces run build",
+    "build:all": "yarn workspaces run build",
+    "start:all": "concurrently \"yarn workspace backend start\"",
+    "lint": "eslint ."
+  },
 
   "dependencies": {
     "buffer": "^6.0.3",

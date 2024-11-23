@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { makePublicRouteController } from "../factories/public-routes";
 
 dotenv.config();
-const authServiceUrl: string = process.env.AUTH_SERVICE_URL ?? "http://localhost:4000"
+const authServiceUrl: string = process.env.AUTH_SERVICE_URL ?? "http://localhost:5050"
 
 export default (router: Router): void => {
   const routeModel = {

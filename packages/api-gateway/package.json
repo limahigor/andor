@@ -10,5 +10,14 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "scripts": {
+    "dev": "yarn concurrently \"yarn start:backend\"",
+    "start": "yarn start:backend",
+    "start:backend": "cd packages/backend && sucrase-node src/main/server.ts",
+    "build": "yarn workspaces run build",
+    "build:all": "yarn workspaces run build",
+    "start:all": "concurrently \"yarn workspace backend start\"",
+    "lint": "eslint ."
+  }
 }

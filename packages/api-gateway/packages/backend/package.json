@@ -12,7 +12,8 @@
     "test:integration": "yarn workspace api-gateway-backend test --watch -c jest-integration-config.js",
     "test:staged": "yarn workspace api-gateway-backend test --findRelatedTests",
     "test:ci": "yarn workspace api-gateway-backend test --coverage",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "build": "echo 'No build step required for api-gateway-backend'"
   },
   "dependencies": {
     "axios": "^1.7.7",
