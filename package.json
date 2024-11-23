@@ -1,29 +1,32 @@
 {
   "private": true,
-  "name": "andor",
-  "devDependencies": {
-    "@types/node": "^22.8.4",
-    "git-commit-msg-linter": "^5.0.8",
-    "i": "^0.3.7",
-    "typescript": "^5.6.3",
-    "eslint": "^9.14.0",
-    "eslint-config-love": "^97.0.0",
-    "husky": "^9.1.6",
-    "jest": "^29.7.0",
-    "ts-node": "^10.9.2",
-    "sucrase": "^3.30.0",
-    "concurrently": "^7.6.0"
-    
-  },
+  "name": "packages",
+  "version": "1.0.0",
   "workspaces": [
-    "packages/*",
-    "packages/api-gateway/packages/*",
-    "packages/media-service/backend"
+    "packages/*"
   ],
+  "scripts": {
+    "dev": "yarn build:all && concurrently \"yarn workspace api-gateway start\" \"yarn workspace media-service start\" \"yarn workspace auth-service start\" \"yarn workspace frontend dev\" \"yarn workspace channel-service start\"",
+    "build": "yarn workspaces run build",
+    "build:all": "yarn build",
+    "start:api-gateway": "yarn workspace api-gateway start",
+    "start:media-service": "yarn workspace media-service start",
+    "start:auth-service": "yarn workspace auth-service start",
+    "start:frontend": "yarn workspace frontend dev",
+    "start:channel-service": "yarn workspace channel-service start"
+  },
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
-    "mongoose": "^8.7.3"
-
+    "mongoose": "^8.7.3",
+    "concurrently": "^7.6.0",
+    "sucrase": "^3.30.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.4",
+    "typescript": "^5.6.3",
+    "eslint": "^9.14.0",
+    "jest": "^29.7.0",
+    "ts-node": "^10.9.2"
   }
 }
