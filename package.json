@@ -3,7 +3,8 @@
   "name": "packages",
   "version": "1.0.0",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/**/backend"
   ],
   "scripts": {
     "dev": "yarn build:all && concurrently \"yarn workspace api-gateway start\" \"yarn workspace media-service start\" \"yarn workspace auth-service start\" \"yarn workspace frontend dev\" \"yarn workspace channel-service start\"",
