@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "node_modules/.bin/sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn workspace auth-service test --watch -c jest-unit-config.js",
@@ -41,6 +41,7 @@
     "jest-environment-node": "^29.7.0",
     "lint-staged": "^15.2.10",
     "merge": "^2.1.1",
+    "sucrase": "^3.35.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
