@@ -23,9 +23,6 @@
 		{
 			"name": "frontend",
 			"path": "packages/frontend"
-		},
-		{
-			"path": "../andor/packages/api-gateway/packages/backend/src"
 		}
 	]
 }
