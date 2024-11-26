@@ -2,7 +2,11 @@
 . "$(dirname "$0")/_/husky.sh"
 
 yarn workspaces info --json | jq -r '.data | keys[]' | while read -r workspace; do
-  if yarn workspace $workspace run | grep -q "test:ci"; then
-    yarn workspace $workspace run test:ci || exit 1
+  # Verifica se o workspace tem o script "test:ci"
+  if yarn workspace "$workspace" run | grep -q "test:ci"; then
+    echo "Running tests for $workspace"
+    yarn workspace "$workspace" run test:ci || exit 1
+  else
+    echo "Skipping $workspace (no test:ci script)"
   fi
 done

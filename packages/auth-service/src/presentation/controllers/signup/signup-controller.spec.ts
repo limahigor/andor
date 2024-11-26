@@ -26,8 +26,7 @@ const makeAddAccount = (): AddAccount => {
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
-    isValid(email: string): boolean {
-      void this;
+    isValid(): boolean {
       return true
     }
   }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "font-awesome/css/font-awesome.min.css";
-import "material-design-icons/iconfont/material-icons.css";
 import "./Signup.css";
 import "./utils.css";
 

@@ -12,7 +12,8 @@ export class ValidateTokenController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { token } = httpRequest.body ?? {};
+      console.log(`token controller: ${JSON.stringify(httpRequest)}`)
+      const { token } = httpRequest.body ?? '';
       if (!token) {
         return badRequest(new MissingParamError('token'));
       }
