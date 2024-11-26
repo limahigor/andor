@@ -1,2 +1,1 @@
 yarn workspaces run lint-staged
-yarn workspaces run lint-staged

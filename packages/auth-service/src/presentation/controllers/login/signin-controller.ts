@@ -11,6 +11,7 @@ export class LoginController implements Controller {
 
   async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
+      console.log(`login controller: ${JSON.stringify(httpRequest)}`)
       const requiredFields = ['username', 'password']
 
       for (const field of requiredFields) {

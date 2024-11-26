@@ -6,5 +6,6 @@ export const adaptRoute = (controller: Controller) => async (req: Request, res: 
     body: req.body
   }
   const httpResponse = await controller.handle(httpRequest)
+  console.log(`adpater express: ${JSON.stringify(httpResponse)}`)
   res.status(httpResponse.statusCode).json(httpResponse.body)
  }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Home.css';
+import './home.css';
 import { FaPlay, FaPlus } from 'react-icons/fa'; // Ícone de adicionar
 import { mediaClient, Media } from '../../client/mediaClient';
 import { useNavigate } from 'react-router-dom';

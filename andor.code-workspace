@@ -1,6 +1,7 @@
 {
 	"folders": [
 		{
+			"name": "andor-test",
 			"path": "."
 		},
 		{
@@ -16,24 +17,15 @@
 			"path": "packages/media-service"
 		},
 		{
-			"name": "api-gateway",
-			"path": "packages/api-gateway"
-		},
-		{
-			"name": "api-gateway-frontend",
-			"path": "packages/api-gateway/packages/frontend"
-		},
-		{
-			"name": "api-gateway-backend",
-			"path": "packages/api-gateway/packages/backend"
-		},
-		{
 			"name": "channel-service",
 			"path": "packages/channel-service"
 		},
 		{
 			"name": "frontend",
 			"path": "packages/frontend"
+		},
+		{
+			"path": "../andor/packages/api-gateway/packages/backend/src"
 		}
-	],
+	]
 }
