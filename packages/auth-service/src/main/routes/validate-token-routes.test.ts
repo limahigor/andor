@@ -47,13 +47,13 @@ describe('ValidateToken Routes', () => {
       .expect(200)
   });
 
-  test('Should return 401 on error', async () => {
+  test('Should return 404 on invalid token', async () => {
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     await request(app)
       .post('/api/validate')
       .send({
         token: 'any_token'
       })
-      .expect(401)
+      .expect(404)
   });
 })

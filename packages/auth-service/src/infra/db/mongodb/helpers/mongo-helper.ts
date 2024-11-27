@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-import { MongoClient, type Collection } from "mongodb";
+import { MongoClient, type ObjectId, type Collection } from "mongodb";
 
 export const MongoHelper = {
-  client: null as unknown as MongoClient,
-  uri: null as unknown as string,
+  client: null as MongoClient | null,
+  uri: null as string | null,
 
   async connect(uri: string): Promise<void> {
     if (!this.client) {
@@ -17,23 +15,27 @@ export const MongoHelper = {
   },
 
   async disconnect(): Promise<void> {
-    if(this.client) {
+    if (this.client) {
       await this.client.close();
       this.client = null;
     }
   },
 
   async getCollection(name: string): Promise<Collection> {
-    if(!this.client){
+    if (!this.client && this.uri) {
       await this.connect(this.uri)
     }
+
+    if (!this.client) {
+      throw new Error('MongoDB client is not connected.');
+    }
+
     return this.client.db().collection(name);
   },
 
-  async map<R>(collection: any): Promise<R> {
+  async map<T extends { _id: ObjectId }>(collection: T): Promise<Omit<T, '_id'> & { id: string }> {
     const { _id, ...rest } = collection;
-
-    return { ...rest, id: _id.toString() }
+    return { ...rest, id: _id.toHexString() };
   }
 
 };

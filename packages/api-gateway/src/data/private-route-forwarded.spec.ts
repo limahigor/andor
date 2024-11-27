@@ -1,6 +1,6 @@
-import type { AxiosAdapter } from "../infra/http/axios-adapter"
+import type { AxiosAdapter, AxiosHttpRequest, AxiosHttpResponse } from "../infra/http/axios-adapter"
 import type { RouteModel } from "../domain/models/route-model"
-import type { HttpRequest, HttpResponse } from "../presentation/protocols"
+import type { HttpRequest } from "../presentation/protocols"
 import { PrivateRouteFowarded } from "./private-route-fowarded"
 import dotenv from "dotenv";
 
@@ -13,20 +13,21 @@ interface SutTypes {
 
 const makeAxiosAdapterStub = (): AxiosAdapter => {
   class AxiosAdapterStub implements AxiosAdapter {
-    httpRequest: HttpRequest
-    result = {
+    httpRequest: AxiosHttpRequest;
+    result: AxiosHttpResponse<string> = {
       statusCode: 200,
-      body: 'any_body'
-    }
+      body: 'any_body',
+    };
 
-    async request(httpRequest: HttpRequest): Promise<HttpResponse> {
-      this.httpRequest = httpRequest
-      return this.result
+    async request<T = string>(httpRequest: AxiosHttpRequest): Promise<AxiosHttpResponse<T>> {
+      this.httpRequest = httpRequest;
+      return this.result as AxiosHttpResponse<T>;
     }
   }
 
-  return new AxiosAdapterStub()
-}
+  return new AxiosAdapterStub();
+};
+
 
 const makeSut = (route: RouteModel): SutTypes => {
   const axiosAdapterStub = makeAxiosAdapterStub()
@@ -98,8 +99,10 @@ describe("Private Route Fowarded", () => {
   })
 
   test('Should AxiosAdapter with correct data', async () => {
+    const expectedUrl = `${process.env.AUTH_SERVICE_URL ?? "http://localhost:5050"}/api/validate`;
+
     const routeModel: RouteModel = {
-      uri: "http://example.com/login",
+      uri: expectedUrl,
       method: "POST",
       authorization: false,
     };
@@ -131,17 +134,21 @@ describe("Private Route Fowarded", () => {
 
     await sut.route(httpRequest);
 
-    const expectedUrl = `${process.env.AUTH_SERVICE_URL ?? "http://localhost:4000"}/validate`;
 
     expect(axiosAdapterSpy).toHaveBeenNthCalledWith(1, {
       method: "POST",
       url: expectedUrl,
-      body: 'valid_token',
+      body: {token: 'valid_token'},
     });
+
+    const bodyRequest = typeof httpRequest.body === "object" && httpRequest.body !== null
+      ? { ...httpRequest.body, userId: 'valid_id' }
+      : { userId: 'valid_id' };
+
     expect(axiosAdapterSpy).toHaveBeenNthCalledWith(2, {
       method: routeModel.method,
       url: routeModel.uri,
-      body: { ...httpRequest.body, userId: 'valid_id' },
+      body: { ...bodyRequest },
     });
 
   });

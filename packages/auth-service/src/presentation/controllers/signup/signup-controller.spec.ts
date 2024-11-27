@@ -2,7 +2,7 @@ import { MissingParamError, InvalidParamError, ServerError } from "../../errors"
 import { DataInUse } from "../../errors/data-in-use-error"
 import { ok } from "../../helpers/http-helper"
 import { SignUpController } from './signup-controller'
-import type { EmailValidator, HttpRequest, AddAccount, AddAccountModel, } from './signup-protocols'
+import type { EmailValidator, HttpRequest, AddAccount, AddAccountModel, SignupRequest, } from './signup-protocols'
 
 interface SutTypes {
   sut: SignUpController
@@ -49,7 +49,7 @@ const makeSut = (): SutTypes => {
 describe('SignUp Controller', () => {
   test('Should return 400 if no username is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         email: 'email@gmail.com',
         password: 'mypassword',
@@ -65,7 +65,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         password: 'mypassword',
@@ -80,7 +80,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -95,7 +95,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 400 if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -110,7 +110,7 @@ describe('SignUp Controller', () => {
 
   test('Should return 400 if password confirmation fails', async () => {
     const { sut } = makeSut()
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -128,7 +128,7 @@ describe('SignUp Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'invalid_email@gmail.com',
@@ -146,7 +146,7 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockResolvedValueOnce(false)
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'invalid_email@gmail.com',
@@ -164,7 +164,7 @@ describe('SignUp Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -183,7 +183,7 @@ describe('SignUp Controller', () => {
       throw new Error()
     })
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -201,7 +201,7 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockImplementationOnce(async () => await Promise.reject(new Error()))
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -219,7 +219,7 @@ describe('SignUp Controller', () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'any_name',
         email: 'email@gmail.com',
@@ -240,7 +240,7 @@ describe('SignUp Controller', () => {
   test('Should return 200 if an valid data provided', async () => {
     const { sut, addAccountStub } = makeSut()
 
-    const httpRequest = {
+    const httpRequest: HttpRequest<SignupRequest> = {
       body: {
         username: 'valid_name',
         email: 'valid_email@gmail.com',

@@ -8,11 +8,11 @@ export default [
   {
     ...love,
     files: ['**/*.js', '**/*.ts'],
+    ignores: ['coverage/**'],
     rules: {
       ...love.rules,
       "@typescript-eslint/strict-boolean-expressions": "off",
-      "@typescript-eslint/no-unsafe-member-access": "off",
-      "@typescript-eslint/no-explicit-any": "off",
+      "eslint-comments/no-unlimited-disable": "off",
       "@typescript-eslint/no-magic-numbers": "off",
       "eslint-comments/require-description": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
@@ -49,6 +49,7 @@ export default [
       "@typescript-eslint/no-unsafe-argument": 'off',
       "@typescript-eslint/no-unsafe-call": 'off',
       "@typescript-eslint/explicit-function-return-type": 'off',
+      "@typescript-eslint/no-unsafe-member-access": 'off'
     },
   },
 ];

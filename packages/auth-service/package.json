@@ -13,7 +13,7 @@
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn workspace auth-service test --watch -c jest-unit-config.js",
     "test:integration": "yarn workspace auth-service test --watch -c jest-integration-config.js",
-    "test:staged": "yarn workspace auth-service test --findRelatedTests",
+    "test:staged": "yarn workspace auth-service test --findRelatedTests -c jest-unit-config.js",
     "test:ci": "yarn workspace auth-service test --coverage",
     "pre-commit": "lint-staged"
   },

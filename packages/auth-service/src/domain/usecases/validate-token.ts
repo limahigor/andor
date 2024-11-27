@@ -6,3 +6,7 @@ export interface ValidateResult {
   isValid: boolean;
   userId: string;
 }
+
+export interface ValidateRequest {
+  token?: string;
+}

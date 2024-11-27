@@ -18,6 +18,8 @@ export class DbLoadAccount implements LoadAccount {
     if(account) {
       const isValid = await this.comparer.compare(loginData.password, account.password)
       if (isValid) {
+        console.log('account')
+        console.log(account)
         status = await this.encrypter.encrypt(account.id)
       }
     }

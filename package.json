@@ -1,8 +1,6 @@
 {
+  "name": "andor",
   "private": true,
-  "name": "packages",
-  "version": "1.0.0",
-  "name": "packages",
   "version": "1.0.0",
   "workspaces": [
     "packages/*"

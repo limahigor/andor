@@ -1,6 +1,6 @@
 import { MissingParamError, InvalidUsernameOrPassword } from "../../errors";
 import { badRequest, ok, serverError } from "../../helpers/http-helper";
-import type { Controller, HttpRequest, HttpResponse, LoadAccount } from "../signup/signup-protocols";
+import type { Controller, HttpRequest, HttpResponse, LoadAccount, LoginRequest } from "../signup/signup-protocols";
 
 export class LoginController implements Controller {
   private readonly loadAccount: LoadAccount
@@ -9,9 +9,14 @@ export class LoginController implements Controller {
     this.loadAccount = loadAccount
   }
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(httpRequest: HttpRequest<LoginRequest>): Promise<HttpResponse> {
     try {
       console.log(`login controller: ${JSON.stringify(httpRequest)}`)
+      
+      if(!httpRequest.body){
+        return badRequest(new MissingParamError('body'))
+      }
+
       const requiredFields = ['username', 'password']
 
       for (const field of requiredFields) {

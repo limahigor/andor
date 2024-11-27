@@ -37,6 +37,6 @@ describe('SignUp Routes', () => {
         username: 'Higor',
         password: 'teste123',
       })
-      .expect(200)
+      .expect(200);
   });
 })

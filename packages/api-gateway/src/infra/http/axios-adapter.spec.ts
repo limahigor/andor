@@ -1,8 +1,10 @@
 import axios, { type AxiosResponse, AxiosHeaders, type AxiosRequestConfig } from "axios";
-import { AxiosAdapter, type HttpRequest } from "./axios-adapter";
+import { AxiosAdapter, type AxiosHttpRequest } from "./axios-adapter";
 
 jest.mock("axios");
-const mockedAxios = axios as jest.MockedFunction<typeof axios>;
+jest.mock("axios");
+
+const mockedAxios = jest.spyOn(axios, "request");
 
 describe("AxiosAdapter", () => {
   let sut: AxiosAdapter = new AxiosAdapter();
@@ -26,7 +28,7 @@ describe("AxiosAdapter", () => {
 
     mockedAxios.mockResolvedValueOnce(mockedResponse);
 
-    const httpRequest: HttpRequest = {
+    const httpRequest: AxiosHttpRequest = {
       url: "http://example.com/api",
       method: "POST",
       body: { username: "test_user", password: "test_password" },
@@ -41,7 +43,7 @@ describe("AxiosAdapter", () => {
   });
 
   test("Should use correct validateStatus function", async () => {
-    const httpRequest: HttpRequest = {
+    const httpRequest: AxiosHttpRequest = {
       url: "http://example.com/api",
       method: "GET",
     };

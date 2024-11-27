@@ -1,6 +1,6 @@
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { MissingParamError, InvalidParamError } from "../../errors"
-import type { EmailValidator, HttpRequest, AddAccount, Controller, HttpResponse } from './signup-protocols'
+import type { EmailValidator, HttpRequest, AddAccount, Controller, HttpResponse, SignupRequest } from './signup-protocols'
 import { DataInUse } from '../../errors/data-in-use-error'
 
 export class SignUpController implements Controller {
@@ -12,9 +12,14 @@ export class SignUpController implements Controller {
     this.addAccount = addAccount
   }
 
-  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+  async handle(httpRequest: HttpRequest<SignupRequest>): Promise<HttpResponse> {
     try {
       console.log(`signup controller req: ${JSON.stringify(httpRequest)}`)
+      
+      if(!httpRequest.body){
+        return badRequest(new MissingParamError('body'))
+      }
+
       const requiredFields = ['username', 'email', 'password', 'passwordConfirmation']
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {

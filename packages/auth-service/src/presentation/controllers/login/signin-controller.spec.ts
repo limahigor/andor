@@ -1,6 +1,6 @@
 import { InvalidUsernameOrPassword, MissingParamError, ServerError } from "../../errors"
 import { LoginController } from "./signin-controller"
-import type { HttpRequest, LoadAccount, LoadAccountModel } from "./signin-protocols"
+import type { HttpRequest, LoadAccount, LoadAccountModel, LoginRequest } from "./signin-protocols"
 
 interface SutTypes {
   sut: LoginController
@@ -38,7 +38,7 @@ const makeSut = (): SutTypes => {
 describe('Signin Controller', () => {
   test('Should return 400 if no username is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<LoginRequest> = {
       body: {
         password: 'mypassword',
       }
@@ -52,7 +52,7 @@ describe('Signin Controller', () => {
 
   test('Should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<LoginRequest> = {
       body: {
         username: 'any_username',
       }
@@ -66,7 +66,7 @@ describe('Signin Controller', () => {
 
   test('Should return 400 if invalid username/password', async () => {
     const { sut, loadAccountStub } = makeSut()
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<LoginRequest> = {
       body: {
         username: 'any_username',
         password: 'mypassword'

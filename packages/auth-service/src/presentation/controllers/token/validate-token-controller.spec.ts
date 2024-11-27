@@ -1,7 +1,7 @@
 import { MissingParamError } from "../../errors";
 import type { HttpRequest } from "../../protocols";
 import { ValidateTokenController } from "./validate-token-controller";
-import type { ValidateResult, ValidateToken } from "./validate-token-controller-protocols";
+import type { ValidateRequest, ValidateResult, ValidateToken } from "./validate-token-controller-protocols";
 
 
 interface SutTypes {
@@ -39,24 +39,27 @@ describe('Validate Token Controller', () => {
   test('Should return true if token is valid', async () => {
     const { sut } = makeSut();
 
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<ValidateRequest> = {
       body: {
         token: 'valid_token',
-      }
+      },
     };
 
-    const result = await sut.handle(httpRequest)
+    const result = await sut.handle(httpRequest);
 
-    expect(result.body.isValid).toBe(true)
-    expect(result.body.userId).toBe('valid_id')
-  })
+    if ('isValid' in result.body && 'userId' in result.body) {
+      expect(result.body.isValid).toBe(true);
+      expect(result.body.userId).toBe('valid_id');
+    } else {
+      throw new Error('Unexpected response body');
+    }
+  });
 
   test('Should return 400 if no token is provided', async () => {
     const { sut } = makeSut();
 
-    const httpRequest: HttpRequest = {
-      body: {
-      }
+    const httpRequest: HttpRequest<ValidateRequest> = {
+      body: {}
     };
 
     const result = await sut.handle(httpRequest)
@@ -69,7 +72,7 @@ describe('Validate Token Controller', () => {
     const { sut, validateAccountStub } = makeSut();
     const validateAccountSpy = jest.spyOn(validateAccountStub, 'validate')
 
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<ValidateRequest> = {
       body: {
         token: 'valid_token',
       }
@@ -84,7 +87,7 @@ describe('Validate Token Controller', () => {
     const { sut, validateAccountStub } = makeSut();
     jest.spyOn(validateAccountStub, 'validate').mockImplementationOnce(async () => await Promise.reject(new Error()))
 
-    const httpRequest: HttpRequest = {
+    const httpRequest: HttpRequest<ValidateRequest> = {
       body: {
         token: 'valid_token',
       }
@@ -101,10 +104,10 @@ describe('Validate Token Controller', () => {
 
   test('Should return 400 if body is undefined', async () => {
     const { sut } = makeSut();
-  
-    const httpRequest: HttpRequest = {};
+
+    const httpRequest: HttpRequest<ValidateRequest> = {};
     const result = await sut.handle(httpRequest);
-  
+
     expect(result.statusCode).toBe(400);
     expect(result.body).toEqual(new MissingParamError('token'));
   });

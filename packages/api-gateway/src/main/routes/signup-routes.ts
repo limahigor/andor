@@ -1,7 +1,7 @@
 import type { Router } from "express";
 import { adaptRoute } from "../adapters/express-routes-adapter";
 import dotenv from "dotenv";
-import { makePublicRouteController } from "../factories/public-routes";
+import { makePrivateRouteController } from "../factories/private-routes";
 
 dotenv.config();
 const authServiceUrl: string = process.env.AUTH_SERVICE_URL ?? "http://localhost:5050"
@@ -12,5 +12,5 @@ export default (router: Router): void => {
     method: "POST",
     authorization: false
   }
-  router.post('/signup', adaptRoute(makePublicRouteController(routeModel)))
+  router.post('/signup', adaptRoute(makePrivateRouteController(routeModel)))
 }

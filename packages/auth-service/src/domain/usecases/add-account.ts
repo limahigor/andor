@@ -8,4 +8,11 @@ export interface Params {
   password: string;
 }
 
+export interface SignupRequest {
+  email?: string;
+  username?: string;
+  password?: string;
+  passwordConfirmation?: string;
+}
+
 export type Result = boolean;

@@ -1,12 +1,12 @@
-export interface HttpResponse {
+export interface HttpResponse<T = unknown> {
   statusCode: number
-  body: any
+  body: T
 }
 
-export interface HttpRequest<T = any> {
+export interface HttpRequest {
   headers?: {
     authorization?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  body?: T
+  body?: unknown
 }

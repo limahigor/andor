@@ -12,10 +12,10 @@ export class JwtValidateToken implements ValidateToken{
   async validate(token: string): Promise<ValidateResult>{
     const result = await this.decrypter.decrypt(token)
 
-    if(result === ''){
+    if(result.id === ''){
       return error()
     }else{
-      return ok(result)
+      return ok(result.id)
     }
   }
 }

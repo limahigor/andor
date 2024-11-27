@@ -1,7 +1,7 @@
-import type { AxiosAdapter } from "../infra/http/axios-adapter"
+import type { AxiosAdapter, AxiosHttpRequest, AxiosHttpResponse } from "../infra/http/axios-adapter"
 import { PublicRouteFowarded } from "./public-route-fowarded"
 import type { RouteModel } from "../domain/models/route-model"
-import type { HttpRequest, HttpResponse } from "../presentation/protocols"
+import type { HttpRequest } from "../presentation/protocols"
 
 interface SutTypes {
   sut: PublicRouteFowarded
@@ -10,20 +10,20 @@ interface SutTypes {
 
 const makeAxiosAdapterStub = (): AxiosAdapter => {
   class AxiosAdapterStub implements AxiosAdapter {
-    httpRequest: HttpRequest
-    result = {
+    httpRequest: AxiosHttpRequest;
+    result: AxiosHttpResponse<string> = {
       statusCode: 200,
-      body: 'any_body'
-    }
+      body: 'any_body',
+    };
 
-    async request(httpRequest: HttpRequest): Promise<HttpResponse> {
-      this.httpRequest = httpRequest
-      return this.result
+    async request<T = string>(httpRequest: AxiosHttpRequest): Promise<AxiosHttpResponse<T>> {
+      this.httpRequest = httpRequest;
+      return this.result as AxiosHttpResponse<T>;
     }
   }
 
-  return new AxiosAdapterStub()
-}
+  return new AxiosAdapterStub();
+};
 
 const makeSut = (route: RouteModel): SutTypes => {
   const axiosAdapterStub = makeAxiosAdapterStub()

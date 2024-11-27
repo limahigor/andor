@@ -1,4 +1,5 @@
 import type { Decrypter } from '../../protocols';
+import type { TokenResult } from './helpers/helper-validate';
 import { JwtValidateToken } from './jwt-validate-token';
 
 interface SutTypes {
@@ -8,8 +9,8 @@ interface SutTypes {
 
 const makeDecrypterStub = (): Decrypter => {
   class DecrypterStub implements Decrypter {
-    async decrypt(value: string): Promise<string> {
-      return 'valid_id'
+    async decrypt(value: string): Promise<TokenResult> {
+      return { id: 'valid_id', iat: 0 }
     }
   }
 
@@ -46,7 +47,7 @@ describe('JwtValidateToken', () => {
 
   test('Should return isValid as false if jwt.verify returns null', async () => {
     const { sut, decrypterStub } = makeSut();
-    jest.spyOn(decrypterStub, 'decrypt').mockResolvedValue('');
+    jest.spyOn(decrypterStub, 'decrypt').mockResolvedValue({id: '', iat: 0});
 
     const result = await sut.validate('any_token');
 
